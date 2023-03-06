@@ -35,7 +35,7 @@ public partial class CinemaContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Server=DESKTOP-9O78KC4\\SQLEXPRESS; Database=Cinema; Trusted_Connection=True; Trust Server Certificate=True;");
+        => optionsBuilder.UseSqlServer("Server=DESKTOP-9O78KC4\\SQLEXPRESS; Database=Cinema; Trusted_Connection=True; Trust Server Certificate = True;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -64,6 +64,8 @@ public partial class CinemaContext : DbContext
         modelBuilder.Entity<Hall>(entity =>
         {
             entity.ToTable("Hall");
+
+            entity.Property(e => e.HallName).HasMaxLength(5);
 
             entity.HasOne(d => d.Cinema).WithMany(p => p.Halls)
                 .HasForeignKey(d => d.CinemaId)

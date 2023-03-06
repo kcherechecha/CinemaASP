@@ -7,7 +7,7 @@ public partial class Hall
 {
     public int HallId { get; set; }
 
-    public int HallName { get; set; }
+    public string HallName { get; set; } = null!;
 
     public int HallCapacity { get; set; }
 

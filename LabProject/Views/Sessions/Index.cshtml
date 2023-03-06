@@ -1,0 +1,59 @@
+﻿@model IEnumerable<LabProject.Models.Session>
+
+@{
+    ViewData["Title"] = "Сеанси в залі";
+}
+
+<h1>Сеанси в @ViewBag.HallName</h1>
+
+<p>
+    @Html.ActionLink("Додати новий сеанс", "Create", new {HallId = ViewBag.HallId})
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.SessionNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SessionDateTime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SessionState)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Hall)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Movie)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.SessionNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SessionDateTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SessionState)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Hall.HallId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Movie.MovieId)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.SessionId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.SessionId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.SessionId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
