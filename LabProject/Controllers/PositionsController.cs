@@ -9,93 +9,85 @@ using LabProject.Models;
 
 namespace LabProject.Controllers
 {
-    public class MoviesController : Controller
+    public class PositionsController : Controller
     {
         private readonly CinemaContext _context;
 
-        public MoviesController(CinemaContext context)
+        public PositionsController(CinemaContext context)
         {
             _context = context;
         }
 
-        // GET: Movies
-        public async Task<IActionResult> Index(int? id, string? name)
+        // GET: Positions
+        public async Task<IActionResult> Index()
         {
-            return View(await _context.Movies.ToListAsync());
-
-            //if (id == null) return View(await _context.Movies.ToListAsync()); 
-            //ViewBag.SessionId = id;
-            //ViewBag.SessionName = name;
-            //var moviesBySessions = _context.Movies.Where(b => b. == id).Include(b => b.Session);
-            //return View(await moviesBySessions.ToListAsync());
+              return View(await _context.Positions.ToListAsync());
         }
 
-        // GET: Movies/Details/5
+        // GET: Positions/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.Movies == null)
+            if (id == null || _context.Positions == null)
             {
                 return NotFound();
             }
 
-            var movie = await _context.Movies
-                .FirstOrDefaultAsync(m => m.MovieId == id);
-            if (movie == null)
+            var position = await _context.Positions
+                .FirstOrDefaultAsync(m => m.PositionId == id);
+            if (position == null)
             {
                 return NotFound();
             }
 
-            return RedirectToAction("Index", "MovieCasts", new {id = movie.MovieId, name = movie.MovieName});
+            return View(position);
         }
 
-        // GET: Movies/Create
+        // GET: Positions/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Movies/Create
+        // POST: Positions/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("MovieId,MovieName,MovieDuration,MovieRating,MovieReleaseDate")] Movie movie)
+        public async Task<IActionResult> Create([Bind("PositionId,PositionName")] Position position)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(movie);
+                _context.Add(position);
                 await _context.SaveChangesAsync();
-                //return RedirectToAction(nameof(Index));
-                return RedirectToAction("Index", "Genres", new { movieId = movie.MovieId });
+                return RedirectToAction(nameof(Index));
             }
-             return View(movie);
-            //return RedirectToAction("Index", "Genres", new { Movieid = movie.MovieId });
+            return View(position);
         }
 
-        // GET: Movies/Edit/5
+        // GET: Positions/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.Movies == null)
+            if (id == null || _context.Positions == null)
             {
                 return NotFound();
             }
 
-            var movie = await _context.Movies.FindAsync(id);
-            if (movie == null)
+            var position = await _context.Positions.FindAsync(id);
+            if (position == null)
             {
                 return NotFound();
             }
-            return View(movie);
+            return View(position);
         }
 
-        // POST: Movies/Edit/5
+        // POST: Positions/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("MovieId,MovieName,MovieDuration,MovieRating,MovieReleaseDate")] Movie movie)
+        public async Task<IActionResult> Edit(int id, [Bind("PositionId,PositionName")] Position position)
         {
-            if (id != movie.MovieId)
+            if (id != position.PositionId)
             {
                 return NotFound();
             }
@@ -104,12 +96,12 @@ namespace LabProject.Controllers
             {
                 try
                 {
-                    _context.Update(movie);
+                    _context.Update(position);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!MovieExists(movie.MovieId))
+                    if (!PositionExists(position.PositionId))
                     {
                         return NotFound();
                     }
@@ -120,49 +112,49 @@ namespace LabProject.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(movie);
+            return View(position);
         }
 
-        // GET: Movies/Delete/5
+        // GET: Positions/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Movies == null)
+            if (id == null || _context.Positions == null)
             {
                 return NotFound();
             }
 
-            var movie = await _context.Movies
-                .FirstOrDefaultAsync(m => m.MovieId == id);
-            if (movie == null)
+            var position = await _context.Positions
+                .FirstOrDefaultAsync(m => m.PositionId == id);
+            if (position == null)
             {
                 return NotFound();
             }
 
-            return View(movie);
+            return View(position);
         }
 
-        // POST: Movies/Delete/5
+        // POST: Positions/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Movies == null)
+            if (_context.Positions == null)
             {
-                return Problem("Entity set 'CinemaContext.Movies'  is null.");
+                return Problem("Entity set 'CinemaContext.Positions'  is null.");
             }
-            var movie = await _context.Movies.FindAsync(id);
-            if (movie != null)
+            var position = await _context.Positions.FindAsync(id);
+            if (position != null)
             {
-                _context.Movies.Remove(movie);
+                _context.Positions.Remove(position);
             }
             
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool MovieExists(int id)
+        private bool PositionExists(int id)
         {
-          return _context.Movies.Any(e => e.MovieId == id);
+          return _context.Positions.Any(e => e.PositionId == id);
         }
     }
 }

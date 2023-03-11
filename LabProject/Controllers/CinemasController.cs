@@ -41,7 +41,9 @@ namespace LabProject.Controllers
                 return NotFound();
             }
             //return view(cinema)
-            return RedirectToAction("Index", "Halls", new {id = cinema.CinemaId, name=cinema.CinemaName});
+
+            return RedirectToAction("Index", "Sessions", new {id = cinema.CinemaId, name=cinema.CinemaName});
+
         }
 
         // GET: Cinemas/Create

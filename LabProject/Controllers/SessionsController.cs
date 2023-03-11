@@ -22,10 +22,17 @@ namespace LabProject.Controllers
         // GET: Sessions
         public async Task<IActionResult> Index(int? id, string? name)
         {
+            //if (id == null) return RedirectToAction("Cinemas", "Index");
+            //ViewBag.HallId = id;
+            //ViewBag.HallName = name;
+            //var sessionsByHall = _context.Sessions.Where(b=>b.HallId == id).Include(b => b.Hall);
+            //return View(await sessionsByHall.ToListAsync());
+
             if (id == null) return RedirectToAction("Cinemas", "Index");
             ViewBag.CinemaId = id;
             ViewBag.CinemaName = name;
-            var sessionsByHall = _context.Sessions.Where(b=>b.HallId == id).Include(b => b.Hall);
+            var hallsByCinema = _context.Halls.Where(b => b.CinemaId == id).Include(b => b.Cinema);
+            var sessionsByHall = _context.Sessions.Where(hallsByCinema => hallsByCinema.HallId == id).Include(hallsByCinema => hallsByCinema.Hall);
             return View(await sessionsByHall.ToListAsync());
         }
 
@@ -53,15 +60,15 @@ namespace LabProject.Controllers
         // GET: Sessions/Create
         public IActionResult Create(int hallId)
         {
-            //ViewData["HallId"] = new SelectList(_context.Halls, "HallId", "HallId");
-            //ViewData["MovieId"] = new SelectList(_context.Movies, "MovieId", "MovieId");
+            ViewData["HallId"] = new SelectList(_context.Halls, "HallId", "HallId");
+            ViewData["MovieId"] = new SelectList(_context.Movies, "MovieId", "MovieName");
             
 
             //ViewBag.CinemaId = cinemaId;
             //ViewBag.CinemaName = _context.Cinemas.Where(b => b.CinemaId == cinemaId).FirstOrDefault().CinemaName;
 
-            ViewBag.HallId = hallId;
-            ViewBag.HallName = _context.Halls.Where(c => c.HallId == hallId).FirstOrDefault().HallName;
+            //ViewBag.HallId = hallId;
+            //ViewBag.HallName = _context.Halls.Where(c => c.HallId == hallId).FirstOrDefault().HallName;
             return View();
         }
 
@@ -73,18 +80,18 @@ namespace LabProject.Controllers
         public async Task<IActionResult> Create(int hallId, [Bind("SessionId,SessionNumber,SessionDateTime,SessionState,HallId,MovieId")] Session session)
         {
 
-            session.HallId = hallId;
+            //session.HallId = hallId;
             if (ModelState.IsValid)
             {
                 _context.Add(session);
                 await _context.SaveChangesAsync();
-                // return RedirectToAction(nameof(Index));
-                return RedirectToAction("Index", "Sessions", new { id = hallId, name = _context.Halls.Where(c => c.HallId == hallId).FirstOrDefault().HallName });
+                return RedirectToAction(nameof(Index));
+                //return RedirectToAction("Index", "Sessions", new { id = hallId, name = _context.Halls.Where(c => c.HallId == hallId).FirstOrDefault().HallName });
             }
-            //ViewData["HallId"] = new SelectList(_context.Halls, "HallId", "HallId", session.HallId);
-           // ViewData["MovieId"] = new SelectList(_context.Movies, "MovieId", "MovieId", session.MovieId);
-            //return View(session);
-            return RedirectToAction("Index", "Sessions", new { id = hallId, name = _context.Halls.Where(c => c.HallId == hallId).FirstOrDefault().HallName });
+            ViewData["HallId"] = new SelectList(_context.Halls, "HallId", "HallId", session.HallId);
+             ViewData["MovieId"] = new SelectList(_context.Movies, "MovieId", "MovieId", session.MovieId);
+            return View(session);
+            //RedirectToAction("Index", "Sessions", new { id = hallId, name = _context.Halls.Where(c => c.HallId == hallId).FirstOrDefault().HallName });
         }
 
         // GET: Sessions/Edit/5
