@@ -21,7 +21,9 @@ namespace LabProject.Controllers
         // GET: Movies
         public async Task<IActionResult> Index(int? id, string? name)
         {
-            return View(await _context.Movies.ToListAsync());
+            var genre = _context.MovieGenres.Where(b => b.MovieId == b.Movie.MovieId).Include(b => b.Genre.GenreName);
+            var movieList = _context.Movies.Include(genre => genre.MovieGenres);
+            return View(await movieList.ToListAsync());
 
             //if (id == null) return View(await _context.Movies.ToListAsync()); 
             //ViewBag.SessionId = id;
@@ -150,10 +152,17 @@ namespace LabProject.Controllers
             {
                 return Problem("Entity set 'CinemaContext.Movies'  is null.");
             }
-            var movie = await _context.Movies.FindAsync(id);
+            var movie = await _context.Movies
+                .Include(m => m.MovieGenres)
+                .FirstOrDefaultAsync(m => m.MovieId == id);
+
             if (movie != null)
             {
+                foreach (var m in movie.MovieGenres)
+                    _context.Remove(m);
+
                 _context.Movies.Remove(movie);
+
             }
             
             await _context.SaveChangesAsync();

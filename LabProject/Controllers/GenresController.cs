@@ -52,10 +52,15 @@ namespace LabProject.Controllers
 
         public async Task<IActionResult> AddGenre(int? id)
         {
+            //var MovieGenre = _context.MovieGenres.Where(b => b.MovieId == movieId).Where(b => b.GenreId == genreId).FirstOrDefault();
             if (id == null || _context.Genres == null)
             {
                 return NotFound();
             }
+            //if(MovieGenre != null)
+            //{
+            //    // You already add this genre
+            //}
             var genres = await _context.Genres.ToArrayAsync();
             ViewBag.MovieId = id;
             return View(genres);
@@ -175,25 +180,29 @@ namespace LabProject.Controllers
         // Genre/Confrim
         public async Task<IActionResult> ConfirmGenre(int genreId, int movieId)
         {
+            var MovieGenre = _context.MovieGenres.Where(b => b.MovieId == movieId).Where(b => b.GenreId == genreId).FirstOrDefault();
+            if (MovieGenre != null)
+            {
+                // You already add this genre
+                return RedirectToAction("Index", "Genres", new { movieId });
+            }
             var movieGenre = new MovieGenre
             {
                 GenreId = genreId,
                 MovieId = movieId
             };
-            
+
             _context.MovieGenres.Add(movieGenre);
             await _context.SaveChangesAsync();
 
-            return RedirectToAction("Index", "Movies");
-
-            //if (movieId == null || genreId == null)
-            //{
-            //    return NotFound();
-            //}
-            //var genre = await _context.Genres.Include(b=>b.GenreName).FirstOrDefaultAsync(m=>m.GenreId == genreId);
-            //if (genre == null) return NotFound();
-            //ViewBag.MovieId = movieId;
-            //return View(genre);
+            return RedirectToAction("Index", "Genres", new { movieId });
         }
+            // redirect to MovieCast
+        public async Task<IActionResult> ProceedToMovieCast(int movieId)
+        {
+
+            return RedirectToAction("Create", "MovieCasts", new { movieId = movieId});
+        }
+        
     }
 }

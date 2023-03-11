@@ -47,11 +47,12 @@ namespace LabProject.Controllers
         }
 
         // GET: MovieCasts/Create
-        public IActionResult Create()
+        public IActionResult Create(int movieId)
         {
             ViewData["CastMemberId"] = new SelectList(_context.CastMembers, "CastMemberId", "CastMemberId");
-            ViewData["MovieId"] = new SelectList(_context.Movies, "MovieId", "MovieId");
+            //ViewData["MovieId"] = new SelectList(_context.Movies, "MovieId", "MovieId");
             ViewData["PositionId"] = new SelectList(_context.Positions, "PositionId", "PositionId");
+            ViewBag.MovieId = movieId;
             return View();
         }
 
@@ -60,8 +61,9 @@ namespace LabProject.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("MovieCastId,CastMemberId,PositionId,MovieId")] MovieCast movieCast)
+        public async Task<IActionResult> Create(int movieId,[Bind("MovieCastId,CastMemberId,PositionId,MovieId")] MovieCast movieCast)
         {
+            movieCast.MovieId = movieId;
             if (ModelState.IsValid)
             {
                 _context.Add(movieCast);

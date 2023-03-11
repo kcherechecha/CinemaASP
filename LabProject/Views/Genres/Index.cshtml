@@ -9,6 +9,8 @@
 @*<p>
     <a asp-action="Create">Create New</a>
 </p>*@
+@Html.ActionLink("Додати moviecast","Create", "MovieCasts" ,new {movieId = ViewBag.MovieId})
+
 <table class="table">
     <thead>
         <tr>
@@ -52,5 +54,9 @@
             </td>
         </tr>
 }
+        @*<form asp-action="ProceedToMovieCast" method="post">
+            <input type="hidden" name="movieId" value="@ViewBag.MovieId" />
+            <button type="submit">Add cast</button>
+        </form>*@
     </tbody>
 </table>
