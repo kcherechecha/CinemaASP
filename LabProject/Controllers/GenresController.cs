@@ -19,9 +19,10 @@ namespace LabProject.Controllers
         }
 
         // GET: Genres
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? movieId)
         {
             //var dbGenreContext = _context.Genres.Include(g => g.GenreName);
+            ViewBag.MovieId = movieId;
             return View(await _context.Genres.ToListAsync());
         }
 
@@ -174,20 +175,25 @@ namespace LabProject.Controllers
         // Genre/Confrim
         public async Task<IActionResult> ConfirmGenre(int genreId, int movieId)
         {
-            var MovieGenre = _context.MovieGenres.Where(b=>b.GenreId == genreId).Where(b=> b.MovieId == movieId).FirstOrDefault();
-            if (MovieGenre == null)
+            var movieGenre = new MovieGenre
             {
-                return NotFound();
-            }
+                GenreId = genreId,
+                MovieId = movieId
+            };
+            
+            _context.MovieGenres.Add(movieGenre);
+            await _context.SaveChangesAsync();
 
-            var genre = await _context.Genres
-                .FirstOrDefaultAsync(m => m.GenreId == genreId);
-            if (genre == null)
-            {
-                return NotFound();
-            }
+            return RedirectToAction("Index", "Movies");
 
-            return RedirectToAction("AddMovieGenre", "MovieGenres", new {GenreId = genre.GenreId, ViewBag.MovieId });
+            //if (movieId == null || genreId == null)
+            //{
+            //    return NotFound();
+            //}
+            //var genre = await _context.Genres.Include(b=>b.GenreName).FirstOrDefaultAsync(m=>m.GenreId == genreId);
+            //if (genre == null) return NotFound();
+            //ViewBag.MovieId = movieId;
+            //return View(genre);
         }
     }
 }

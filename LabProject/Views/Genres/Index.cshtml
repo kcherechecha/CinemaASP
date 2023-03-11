@@ -28,15 +28,27 @@
                 @*<a asp-action="Edit" asp-route-id="@item.GenreId">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.GenreId">Details</a> |
                 <a asp-action="Delete" asp-route-id="@item.GenreId">Delete</a>*@
-                <a asp-action="ConfirmGenre" asp-route-id="@item.GenreId">Confirm</a>
-                @*<form asp-action="ConfirmGenre" method="post">*@
-                <input type="hidden" name="movieId" value="@ViewBag.MovieId" />
+
+
+                @*<input type="hidden" name="movieId" value="@ViewBag.MovieId" />
                 <input type="hidden" name="genreId" value="@item.GenreId" />
-                console.log(@ViewBag.MovieId)
-                console.log(@item.GenreId)
+                <a asp-action="ConfirmGenre" asp-route-id="@item.GenreId">Confirm</a>*@
+
+
+                @*<form asp-action="ConfirmGenre" method="post">*@
+               
                 @*<a>Confirm</a>*@
 
                 @*</form>*@
+
+
+               @* @Html.ActionLink("Confirm", "ConfirmGenre", new {movieId = ViewBag.MovieId})*@
+
+               <form asp-action="ConfirmGenre" method="post">
+                   <input type="hidden" name="genreId" value="@item.GenreId" />
+                   <input type="hidden"name="movieId" value="@ViewBag.MovieId" />
+                   <button type="submit">Confirm</button>
+               </form>
             </td>
         </tr>
 }
