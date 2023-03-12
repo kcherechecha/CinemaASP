@@ -31,10 +31,10 @@
                 @Html.DisplayFor(modelItem => item.CinemaAddress)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.CinemaId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.CinemaId">Details</a> | 
+                <a asp-action="Details" asp-route-id="@item.CinemaId">Розклад</a> |
+                <a asp-action="Edit" asp-route-id="@item.CinemaId">Редагувати</a> | 
                 @*<a asp-controller="Halls" asp-action="Index" asp-route-id="@item.CinemaId" asp-route-name="@item.CinemaName">Halls</a> |*@
-                <a asp-action="Delete" asp-route-id="@item.CinemaId">Delete</a>
+                <a asp-action="Delete" asp-route-id="@item.CinemaId">Видалити</a>
             </td>
         </tr>
 }

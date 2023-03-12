@@ -59,6 +59,7 @@ namespace LabProject.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("CinemaId,CinemaName,CinemaAddress")] Cinema cinema)
         {
+            
             if (ModelState.IsValid)
             {
                 _context.Add(cinema);
@@ -173,6 +174,26 @@ namespace LabProject.Controllers
         private bool CinemaExists(int id)
         {
           return (_context.Cinemas?.Any(e => e.CinemaId == id)).GetValueOrDefault();
+        }
+
+        //check if there is a cinema with the same address
+        [HttpPost]
+        public ActionResult AddressExists(string CinemaAddress)
+        {
+            bool addressExists = false;
+
+            var cinema = _context.Cinemas.Where(c => c.CinemaAddress == CinemaAddress).FirstOrDefault();
+
+            if (cinema != null) addressExists = true;
+
+            if(addressExists == true)
+            {
+                return Content("false");
+            }
+            else
+            {
+                return Content("true");
+            }
         }
     }
 }
