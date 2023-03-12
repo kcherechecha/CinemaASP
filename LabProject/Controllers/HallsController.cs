@@ -92,7 +92,7 @@ namespace LabProject.Controllers
             {
                 return NotFound();
             }
-            ViewData["CinemaId"] = new SelectList(_context.Cinemas, "CinemaId", "CinemaName", hall.CinemaId);
+            //ViewData["CinemaId"] = new SelectList(_context.Cinemas, "CinemaId", "CinemaName", hall.CinemaId);
             return View(hall);
         }
 
@@ -128,8 +128,8 @@ namespace LabProject.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CinemaId"] = new SelectList(_context.Cinemas, "CinemaId", "CinemaName", hall.CinemaId);
-            return View(hall);
+            //ViewData["CinemaId"] = new SelectList(_context.Cinemas, "CinemaId", "CinemaName", hall.CinemaId);
+            return RedirectToAction("Index", new { hall.CinemaId, hall.Cinema.CinemaName });
         }
 
         // GET: Halls/Delete/5

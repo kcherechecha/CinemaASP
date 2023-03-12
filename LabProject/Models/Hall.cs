@@ -7,13 +7,13 @@ public partial class Hall
 {
     public int HallId { get; set; }
 
-    public string HallName { get; set; } = null!;
+    public string HallName { get; set; }
 
     public int HallCapacity { get; set; }
 
     public int CinemaId { get; set; }
 
-    public virtual Cinema Cinema { get; set; } = null!;
+    public virtual Cinema Cinema { get; set; }
 
     public virtual ICollection<Session> Sessions { get; } = new List<Session>();
 }

@@ -22,18 +22,19 @@ namespace LabProject.Controllers
         // GET: Sessions
         public async Task<IActionResult> Index(int? id, string? name)
         {
-            //if (id == null) return RedirectToAction("Cinemas", "Index");
-            //ViewBag.HallId = id;
-            //ViewBag.HallName = name;
-            //var sessionsByHall = _context.Sessions.Where(b=>b.HallId == id).Include(b => b.Hall);
-            //return View(await sessionsByHall.ToListAsync());
-
             if (id == null) return RedirectToAction("Cinemas", "Index");
-            ViewBag.CinemaId = id;
-            ViewBag.CinemaName = name;
-            var hallsByCinema = _context.Halls.Where(b => b.CinemaId == id).Include(b => b.Cinema);
-            var sessionsByHall = _context.Sessions.Where(hallsByCinema => hallsByCinema.HallId == id).Include(hallsByCinema => hallsByCinema.Hall);
+            ViewBag.HallId = id;
+            ViewBag.HallName = name;
+            var sessionsByHall = _context.Sessions.Where(b => b.HallId == id).Include(b => b.Hall).Include(b => b.Movie).Include(b => b.Status);
             return View(await sessionsByHall.ToListAsync());
+            
+            //view sessions in cinema (doesn't work)
+        //    if (id == null) return RedirectToAction("Cinemas", "Index");
+        //    ViewBag.CinemaId = id;
+        //    ViewBag.CinemaName = name;
+        //    var hallsByCinema = _context.Halls.Where(b => b.CinemaId == id).Include(b => b.Cinema);
+        //    var sessionsByHall = _context.Sessions.Where(hallsByCinema => hallsByCinema.HallId == id).Include(hallsByCinema => hallsByCinema.Hall);
+        //    return View(await sessionsByHall.ToListAsync());
         }
 
         // GET: Sessions/Details/5
@@ -62,12 +63,12 @@ namespace LabProject.Controllers
         {
             ViewData["HallId"] = new SelectList(_context.Halls, "HallId", "HallId");
             ViewData["MovieId"] = new SelectList(_context.Movies, "MovieId", "MovieName");
-            
+            ViewData["StatusId"] = new SelectList(_context.Statuses, "StatusId", "StatusName");
 
             //ViewBag.CinemaId = cinemaId;
             //ViewBag.CinemaName = _context.Cinemas.Where(b => b.CinemaId == cinemaId).FirstOrDefault().CinemaName;
 
-            //ViewBag.HallId = hallId;
+            ViewBag.HallId = hallId;
             //ViewBag.HallName = _context.Halls.Where(c => c.HallId == hallId).FirstOrDefault().HallName;
             return View();
         }
@@ -77,19 +78,20 @@ namespace LabProject.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(int hallId, [Bind("SessionId,SessionNumber,SessionDateTime,SessionState,HallId,MovieId")] Session session)
+        public async Task<IActionResult> Create(int hallId, [Bind("SessionId,SessionNumber,SessionDateTime,StatusId,HallId,MovieId")] Session session)
         {
 
-            //session.HallId = hallId;
+            session.HallId = hallId;
             if (ModelState.IsValid)
             {
                 _context.Add(session);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-                //return RedirectToAction("Index", "Sessions", new { id = hallId, name = _context.Halls.Where(c => c.HallId == hallId).FirstOrDefault().HallName });
+                //return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index", "Sessions", new { id = hallId, name = _context.Halls.Where(c => c.HallId == hallId).FirstOrDefault().HallName });
             }
             ViewData["HallId"] = new SelectList(_context.Halls, "HallId", "HallId", session.HallId);
-             ViewData["MovieId"] = new SelectList(_context.Movies, "MovieId", "MovieId", session.MovieId);
+            ViewData["MovieId"] = new SelectList(_context.Movies, "MovieId", "MovieId", session.MovieId);
+            ViewData["StatusId"] = new SelectList(_context.Statuses, "StatusId", "StatusName");
             return View(session);
             //RedirectToAction("Index", "Sessions", new { id = hallId, name = _context.Halls.Where(c => c.HallId == hallId).FirstOrDefault().HallName });
         }
@@ -109,6 +111,7 @@ namespace LabProject.Controllers
             }
             ViewData["HallId"] = new SelectList(_context.Halls, "HallId", "HallId", session.HallId);
             ViewData["MovieId"] = new SelectList(_context.Movies, "MovieId", "MovieId", session.MovieId);
+            ViewData["StatusId"] = new SelectList(_context.Statuses, "StatusId", "StatusName");
             return View(session);
         }
 
@@ -117,7 +120,7 @@ namespace LabProject.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("SessionId,SessionNumber,SessionDateTime,SessionState,HallId,MovieId")] Session session)
+        public async Task<IActionResult> Edit(int id, [Bind("SessionId,SessionNumber,SessionDateTime,StatusId,HallId,MovieId")] Session session)
         {
             if (id != session.SessionId)
             {
@@ -146,6 +149,7 @@ namespace LabProject.Controllers
             }
             ViewData["HallId"] = new SelectList(_context.Halls, "HallId", "HallId", session.HallId);
             ViewData["MovieId"] = new SelectList(_context.Movies, "MovieId", "MovieId", session.MovieId);
+            ViewData["StatusId"] = new SelectList(_context.Statuses, "StatusId", "StatusName");
             return View(session);
         }
 

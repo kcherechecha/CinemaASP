@@ -7,7 +7,7 @@ public partial class Position
 {
     public int PositionId { get; set; }
 
-    public string PositionName { get; set; } = null!;
+    public string PositionName { get; set; }
 
     public virtual ICollection<MovieCast> MovieCasts { get; } = new List<MovieCast>();
 }

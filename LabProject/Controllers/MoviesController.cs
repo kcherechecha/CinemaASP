@@ -154,6 +154,7 @@ namespace LabProject.Controllers
             }
             var movie = await _context.Movies
                 .Include(m => m.MovieGenres)
+                .Include(m => m.MovieCasts)
                 .FirstOrDefaultAsync(m => m.MovieId == id);
 
             if (movie != null)
@@ -161,8 +162,10 @@ namespace LabProject.Controllers
                 foreach (var m in movie.MovieGenres)
                     _context.Remove(m);
 
-                _context.Movies.Remove(movie);
+                foreach (var m in movie.MovieCasts)
+                    _context.Remove(m);
 
+                _context.Movies.Remove(movie);
             }
             
             await _context.SaveChangesAsync();

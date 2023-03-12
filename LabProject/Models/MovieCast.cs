@@ -13,9 +13,9 @@ public partial class MovieCast
 
     public int MovieId { get; set; }
 
-    public virtual CastMember CastMember { get; set; } = null!;
+    public virtual CastMember CastMember { get; set; }
 
-    public virtual Movie Movie { get; set; } = null!;
+    public virtual Movie Movie { get; set; }
 
-    public virtual Position Position { get; set; } = null!;
+    public virtual Position Position { get; set; }
 }

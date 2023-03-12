@@ -42,7 +42,7 @@ namespace LabProject.Controllers
             }
             //return view(cinema)
 
-            return RedirectToAction("Index", "Sessions", new {id = cinema.CinemaId, name=cinema.CinemaName});
+            return RedirectToAction("Index", "Halls", new {id = cinema.CinemaId, name=cinema.CinemaName});
 
         }
 
@@ -146,9 +146,23 @@ namespace LabProject.Controllers
             {
                 return Problem("Entity set 'CinemaContext.Cinemas'  is null.");
             }
-            var cinema = await _context.Cinemas.FindAsync(id);
+            var cinema = await _context.Cinemas
+                .Include(c => c.Halls)
+                .FirstOrDefaultAsync(c => c.CinemaId == id);
+
+            var sessions = await _context.Halls
+                .Where(b => b.CinemaId == id)
+                .Include(b => b.Sessions)
+                .FirstOrDefaultAsync();
+
             if (cinema != null)
             {
+                foreach(var s in sessions.Sessions)
+                    _context.Remove(s);
+
+                foreach(var s in cinema.Halls)
+                    _context.Halls.Remove(s);
+
                 _context.Cinemas.Remove(cinema);
             }
             

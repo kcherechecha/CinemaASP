@@ -63,12 +63,18 @@ namespace LabProject.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(int movieId,[Bind("MovieCastId,CastMemberId,PositionId,MovieId")] MovieCast movieCast)
         {
+            var preMovieCast = _context.MovieCasts.Where(m => m.MovieId == movieId).FirstOrDefault();
+            if(preMovieCast != null && preMovieCast.CastMemberId == movieCast.CastMemberId)
+            {
+                // get message error "This actor already exist in this film" try to add again
+                return RedirectToAction("Create", new { movieId = movieId });
+            }
             movieCast.MovieId = movieId;
             if (ModelState.IsValid)
             {
                 _context.Add(movieCast);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Create", new { movieId = movieId});
             }
             ViewData["CastMemberId"] = new SelectList(_context.CastMembers, "CastMemberId", "CastMemberId", movieCast.CastMemberId);
             ViewData["MovieId"] = new SelectList(_context.Movies, "MovieId", "MovieId", movieCast.MovieId);

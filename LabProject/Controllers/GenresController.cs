@@ -197,12 +197,16 @@ namespace LabProject.Controllers
 
             return RedirectToAction("Index", "Genres", new { movieId });
         }
-            // redirect to MovieCast
+        // redirect to MovieCast
         public async Task<IActionResult> ProceedToMovieCast(int movieId)
         {
-
-            return RedirectToAction("Create", "MovieCasts", new { movieId = movieId});
+            var MovieGenre = _context.MovieGenres.Where(m => m.MovieId == movieId).FirstOrDefault();
+            if (MovieGenre == null)
+            {
+                return RedirectToAction("Index", new { movieId = movieId });
+            }
+            return RedirectToAction("Create", "MovieCasts", new { movieId = movieId });
         }
-        
+
     }
 }

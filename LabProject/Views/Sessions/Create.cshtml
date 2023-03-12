@@ -22,21 +22,20 @@
                 <input asp-for="SessionDateTime" class="form-control" />
                 <span asp-validation-for="SessionDateTime" class="text-danger"></span>
             </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="SessionState" /> @Html.DisplayNameFor(model => model.SessionState);
-                </label>
-            </div>
             <div class="form-group">
+                <label asp-for="StatusId" class="control-label"></label>
+                <select asp-for="StatusId" class="form-control" asp-items="ViewBag.StatusId"></select>
+            </div>
+            @*<div class="form-group">
                 <label asp-for="HallId" class="control-label"></label>
                 <select asp-for="HallId" class ="form-control" asp-items="ViewBag.HallId"></select>
-            </div>
+            </div>*@
             <div class="form-group">
                 <label asp-for="MovieId" class="control-label"></label>
                 <select asp-for="MovieId" class ="form-control" asp-items="ViewBag.MovieId"></select>
             </div>
             
-            @*<input type="hidden" value="@ViewBag.HallId" name="HallId" />*@
+            <input type="hidden" value="@ViewBag.HallId" name="HallId" />
 
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
