@@ -13,7 +13,7 @@ public partial class Cinema
     public string CinemaName { get; set; }
     [Required(ErrorMessage = "Адреса кінотеатру обов'язкова")]
     [Display(Name ="Адреса")]
-    [Remote("AddressExists", "Cinemas", HttpMethod ="POST", ErrorMessage ="За цією адресою вже існує кінотеатр")]
+    //[Remote("AddressExists", "Cinemas", HttpMethod ="POST", ErrorMessage ="За цією адресою вже існує кінотеатр")]
     public string CinemaAddress { get; set; }
 
     public virtual ICollection<Hall> Halls { get; } = new List<Hall>();

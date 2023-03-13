@@ -18,9 +18,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.HallCapacity)
             </th>
-            <th>
+            @*<th>
                 @Html.DisplayNameFor(model => model.Cinema)
-            </th>
+            </th>*@
             <th></th>
         </tr>
     </thead>
@@ -33,13 +33,13 @@
             <td>
                 @Html.DisplayFor(modelItem => item.HallCapacity)
             </td>
-            <td>
+            @*<td>
                 @Html.DisplayFor(modelItem => item.Cinema.CinemaName)
-            </td>
+            </td>*@
             <td>
-                <a asp-action="Edit" asp-route-id="@item.HallId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.HallId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.HallId">Delete</a>
+                <a asp-action="Details" asp-route-id="@item.HallId">Розклад</a> |
+                <a asp-action="Edit" asp-route-id="@item.HallId">Редагувати</a> |
+                <a asp-action="Delete" asp-route-id="@item.HallId">Видалити</a>
             </td>
         </tr>
 }

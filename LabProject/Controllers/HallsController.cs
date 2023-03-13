@@ -69,6 +69,14 @@ namespace LabProject.Controllers
             hall.CinemaId = cinemaId;
             if (ModelState.IsValid)
             {
+                var existHallName = await _context.Halls.FirstOrDefaultAsync(c => c.HallName == hall.HallName);
+
+                if (existHallName != null)
+                {
+                    ViewBag.CinemaId = cinemaId;
+                    ModelState.AddModelError("HallName", "Зала з такою назвою вже існує в цьому кінотеатрі");
+                    return View(existHallName);
+                }
                 _context.Add(hall);
                 await _context.SaveChangesAsync();
                 //return RedirectToAction(nameof(Index));
@@ -101,8 +109,9 @@ namespace LabProject.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("HallId,HallName,HallCapacity,CinemaId")] Hall hall)
+        public async Task<IActionResult> Edit(int id,[Bind("HallId,HallName,HallCapacity,CinemaId")] Hall hall)
         {
+            
             if (id != hall.HallId)
             {
                 return NotFound();
@@ -110,6 +119,13 @@ namespace LabProject.Controllers
 
             if (ModelState.IsValid)
             {
+                var existHallName = await _context.Halls.FirstOrDefaultAsync(c => c.HallId != hall.HallId && c.HallName == hall.HallName);
+
+                if (existHallName != null)
+                {
+                    ModelState.AddModelError("HallName", "Зала з такою назвою вже існує в цьому кінотеатрі");
+                    return View(existHallName);
+                }
                 try
                 {
                     _context.Update(hall);
@@ -126,10 +142,11 @@ namespace LabProject.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index", "Halls", new { id = hall.CinemaId, name = _context.Cinemas.Where(c => c.CinemaId == hall.CinemaId).FirstOrDefault().CinemaName });
             }
             //ViewData["CinemaId"] = new SelectList(_context.Cinemas, "CinemaId", "CinemaName", hall.CinemaId);
-            return RedirectToAction("Index", new { hall.CinemaId, hall.Cinema.CinemaName });
+            // return RedirectToAction("Index", "Halls", new { hall.CinemaId, hall.Cinema.CinemaName });
+            return RedirectToAction("Index", "Halls", new { id = id, name = _context.Cinemas.Where(c => c.CinemaId == id).FirstOrDefault().CinemaName });
         }
 
         // GET: Halls/Delete/5
@@ -173,6 +190,42 @@ namespace LabProject.Controllers
         private bool HallExists(int id)
         {
           return (_context.Halls?.Any(e => e.HallId == id)).GetValueOrDefault();
+        }
+
+        //check if there is a cinema with the same address
+       /* [HttpPost]
+        public ActionResult HallNameExists(string HallName, int? id)
+        {
+            bool hallNameExists = false;
+            ViewBag.CinemaId = id;
+            var hall = _context.Halls.Where(b => b.CinemaId == id).Include(b => b.Cinema);
+
+            //var hall = _context.Cinemas.Where(c => c.CinemaAddress == HallName).FirstOrDefault();
+
+            //var hall = _context.Halls.Where()
+
+            if (hall != null) hallNameExists = true;
+
+            if (hallNameExists == true)
+            {
+                return Content("false");
+            }
+            else
+            {
+                return Content("true");
+            }
+        }*/
+
+        //return to all halls
+        public IActionResult ReturnToHalls(int cinemaId, string name)
+        {
+            ViewBag.CinemaId = cinemaId;
+            ViewBag.CinemaName = name;
+            var hallsByCinema = _context.Halls.Where(b => b.CinemaId ==cinemaId).Include(b => b.Cinema);
+            return View(hallsByCinema.ToListAsync());
+            //var halls = _context.Halls.Where(h => h.CinemaId == cinemaId).FirstOrDefault();
+            //return View(halls);
+            //return RedirectToAction("Index", "Hall", new { HallId = hallId });
         }
     }
 }

@@ -59,7 +59,14 @@ namespace LabProject.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("CinemaId,CinemaName,CinemaAddress")] Cinema cinema)
         {
-            
+            var existAddress = await _context.Cinemas.FirstOrDefaultAsync(c => c.CinemaAddress == cinema.CinemaAddress);
+
+            if(existAddress != null)
+            {
+                ModelState.AddModelError("CinemaAddress", "Вже є кінотеатр з такою адресою");
+                return View(existAddress);
+            }
+
             if (ModelState.IsValid)
             {
                 _context.Add(cinema);
@@ -92,6 +99,8 @@ namespace LabProject.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("CinemaId,CinemaName,CinemaAddress")] Cinema cinema)
         {
+            
+
             if (id != cinema.CinemaId)
             {
                 return NotFound();
@@ -99,6 +108,14 @@ namespace LabProject.Controllers
 
             if (ModelState.IsValid)
             {
+                var existAddress = await _context.Cinemas.FirstOrDefaultAsync(c => c.CinemaId != cinema.CinemaId && c.CinemaAddress == cinema.CinemaAddress);
+
+                if (existAddress != null)
+                {
+                    ModelState.AddModelError("CinemaAddress", "Вже є кінотеатр з такою адресою");
+                    return View(existAddress);
+                }
+
                 try
                 {
                     _context.Update(cinema);
@@ -177,11 +194,11 @@ namespace LabProject.Controllers
         }
 
         //check if there is a cinema with the same address
-        [HttpPost]
+       /* [HttpPost]
         public ActionResult AddressExists(string CinemaAddress)
         {
             bool addressExists = false;
-
+            
             var cinema = _context.Cinemas.Where(c => c.CinemaAddress == CinemaAddress).FirstOrDefault();
 
             if (cinema != null) addressExists = true;
@@ -194,6 +211,6 @@ namespace LabProject.Controllers
             {
                 return Content("true");
             }
-        }
+        }*/
     }
 }

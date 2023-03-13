@@ -49,13 +49,17 @@ namespace LabProject.Controllers
                 .Include(s => s.Hall)
                 .Include(s => s.Movie)
                 .FirstOrDefaultAsync(m => m.SessionId == id);
+
             if (session == null)
             {
                 return NotFound();
             }
 
+            var movieId = session.MovieId;
+
             //return View(session);
-            return RedirectToAction("Index", "Movies", new { id = session.SessionId, name = session.SessionNumber });
+            //return RedirectToAction("Index", "Movies", new { id = session.SessionId, name = session.SessionNumber });
+            return RedirectToAction("ShowMovie", "Movies", new { id = movieId });
         }
 
         // GET: Sessions/Create

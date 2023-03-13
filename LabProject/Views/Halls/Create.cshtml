@@ -4,9 +4,8 @@
     ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
+<h1>Додати нову залу</h1>
 
-<h4>Hall</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -30,14 +29,14 @@
             <input type="hidden" value="@ViewBag.CinemaId" name="CinemaId" />
 
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Додати" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    @Html.ActionLink("До списку зал", "Details", "Cinemas", new { id = ViewBag.CinemaId})
 </div>
 
 @section Scripts {

@@ -21,8 +21,7 @@ namespace LabProject.Controllers
         // GET: Movies
         public async Task<IActionResult> Index(int? id, string? name)
         {
-            var genre = _context.MovieGenres.Where(b => b.MovieId == b.Movie.MovieId).Include(b => b.Genre.GenreName);
-            var movieList = _context.Movies.Include(genre => genre.MovieGenres);
+            var movieList = _context.Movies;
             return View(await movieList.ToListAsync());
 
             //if (id == null) return View(await _context.Movies.ToListAsync()); 
@@ -30,6 +29,14 @@ namespace LabProject.Controllers
             //ViewBag.SessionName = name;
             //var moviesBySessions = _context.Movies.Where(b => b. == id).Include(b => b.Session);
             //return View(await moviesBySessions.ToListAsync());
+        }
+
+        public async Task<IActionResult> ShowMovie(int? id)
+        {
+            if (id == null) return RedirectToAction("Session", "Index");
+            ViewBag.SessionId = id;
+            var movieBySession = _context.Movies.Where(b => b.MovieId == id);
+            return View(await movieBySession.ToListAsync());
         }
 
         // GET: Movies/Details/5
