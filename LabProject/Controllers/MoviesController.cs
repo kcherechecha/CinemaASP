@@ -72,6 +72,12 @@ namespace LabProject.Controllers
         {
             if (ModelState.IsValid)
             {
+                var existMovieName = await _context.Movies.FirstOrDefaultAsync(c => c.MovieName == movie.MovieName);
+                if (existMovieName != null)
+                {
+                    ModelState.AddModelError("MovieName", "Вже існує фільм з такою назвою");
+                    return View(existMovieName);
+                }
                 _context.Add(movie);
                 await _context.SaveChangesAsync();
                 //return RedirectToAction(nameof(Index));
@@ -111,6 +117,13 @@ namespace LabProject.Controllers
 
             if (ModelState.IsValid)
             {
+                var existMovieName = await _context.Movies.FirstOrDefaultAsync(c => c.MovieId != movie.MovieId && c.MovieName == movie.MovieName);
+
+                if (existMovieName != null)
+                {
+                    ModelState.AddModelError("MovieName", "Вже існує фільм з такою назвою");
+                    return View(existMovieName);
+                }
                 try
                 {
                     _context.Update(movie);

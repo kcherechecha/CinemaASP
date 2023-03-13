@@ -57,6 +57,12 @@ namespace LabProject.Controllers
         {
             if (ModelState.IsValid)
             {
+                var existMemberName = await _context.CastMembers.FirstOrDefaultAsync(c => c.CastMemberFullName == castMember.CastMemberFullName);
+                if (existMemberName != null)
+                {
+                    ModelState.AddModelError("CastMemberFullName", "Ця людина вже існує");
+                    return View(existMemberName);
+                }
                 _context.Add(castMember);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -94,6 +100,12 @@ namespace LabProject.Controllers
 
             if (ModelState.IsValid)
             {
+                var existMemberName = await _context.CastMembers.FirstOrDefaultAsync(c => c.CastMemberId != castMember.CastMemberId && c.CastMemberFullName == castMember.CastMemberFullName);
+                if (existMemberName != null)
+                {
+                    ModelState.AddModelError("CastMemberFullName", "Ця людина вже існує");
+                    return View(existMemberName);
+                }
                 try
                 {
                     _context.Update(castMember);
