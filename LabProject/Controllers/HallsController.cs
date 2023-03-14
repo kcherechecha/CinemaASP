@@ -69,7 +69,7 @@ namespace LabProject.Controllers
             hall.CinemaId = cinemaId;
             if (ModelState.IsValid)
             {
-                var existHallName = await _context.Halls.FirstOrDefaultAsync(c => c.HallName == hall.HallName);
+                var existHallName = await _context.Halls.FirstOrDefaultAsync(c => c.HallName == hall.HallName && c.CinemaId == cinemaId);
 
                 if (existHallName != null)
                 {
@@ -119,7 +119,7 @@ namespace LabProject.Controllers
 
             if (ModelState.IsValid)
             {
-                var existHallName = await _context.Halls.FirstOrDefaultAsync(c => c.HallId != hall.HallId && c.HallName == hall.HallName);
+                var existHallName = await _context.Halls.FirstOrDefaultAsync(c => c.HallId != hall.HallId && c.HallName == hall.HallName && c.CinemaId == hall.CinemaId);
 
                 if (existHallName != null)
                 {
@@ -177,9 +177,15 @@ namespace LabProject.Controllers
             {
                 return Problem("Entity set 'CinemaContext.Halls'  is null.");
             }
-            var hall = await _context.Halls.FindAsync(id);
+            var hall = await _context.Halls
+                .Include(h => h.Sessions)
+                .FirstOrDefaultAsync(h => h.HallId == id);
+
             if (hall != null)
             {
+                foreach (var h in hall.Sessions)
+                    _context.Remove(h);
+
                 _context.Halls.Remove(hall);
             }
             

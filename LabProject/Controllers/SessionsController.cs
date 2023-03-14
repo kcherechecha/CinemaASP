@@ -27,14 +27,6 @@ namespace LabProject.Controllers
             ViewBag.HallName = name;
             var sessionsByHall = _context.Sessions.Where(b => b.HallId == id).Include(b => b.Hall).Include(b => b.Movie).Include(b => b.Status);
             return View(await sessionsByHall.ToListAsync());
-            
-            //view sessions in cinema (doesn't work)
-        //    if (id == null) return RedirectToAction("Cinemas", "Index");
-        //    ViewBag.CinemaId = id;
-        //    ViewBag.CinemaName = name;
-        //    var hallsByCinema = _context.Halls.Where(b => b.CinemaId == id).Include(b => b.Cinema);
-        //    var sessionsByHall = _context.Sessions.Where(hallsByCinema => hallsByCinema.HallId == id).Include(hallsByCinema => hallsByCinema.Hall);
-        //    return View(await sessionsByHall.ToListAsync());
         }
 
         // GET: Sessions/Details/5
@@ -65,27 +57,24 @@ namespace LabProject.Controllers
         // GET: Sessions/Create
         public IActionResult Create(int hallId)
         {
-            ViewData["HallId"] = new SelectList(_context.Halls, "HallId", "HallId");
+            //ViewData["HallId"] = new SelectList(_context.Halls, "HallId", "HallId");
             ViewData["MovieId"] = new SelectList(_context.Movies, "MovieId", "MovieName");
             ViewData["StatusId"] = new SelectList(_context.Statuses, "StatusId", "StatusName");
 
-            //ViewBag.CinemaId = cinemaId;
-            //ViewBag.CinemaName = _context.Cinemas.Where(b => b.CinemaId == cinemaId).FirstOrDefault().CinemaName;
-
             ViewBag.HallId = hallId;
-            //ViewBag.HallName = _context.Halls.Where(c => c.HallId == hallId).FirstOrDefault().HallName;
             return View();
         }
 
         // POST: Sessions/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
+        [HttpPost] 
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(int hallId, [Bind("SessionId,SessionNumber,SessionDateTime,StatusId,HallId,MovieId")] Session session)
+        public async Task<IActionResult> Create(int hallId, [Bind("SessionId,SessionNumber,SessionDateTime,HallId,MovieId,StatusId")] Session session)
         {
 
             session.HallId = hallId;
+
             if (ModelState.IsValid)
             {
                 _context.Add(session);
@@ -93,7 +82,7 @@ namespace LabProject.Controllers
                 //return RedirectToAction(nameof(Index));
                 return RedirectToAction("Index", "Sessions", new { id = hallId, name = _context.Halls.Where(c => c.HallId == hallId).FirstOrDefault().HallName });
             }
-            ViewData["HallId"] = new SelectList(_context.Halls, "HallId", "HallId", session.HallId);
+            //ViewData["HallId"] = new SelectList(_context.Halls, "HallId", "HallId", session.HallId);
             ViewData["MovieId"] = new SelectList(_context.Movies, "MovieId", "MovieId", session.MovieId);
             ViewData["StatusId"] = new SelectList(_context.Statuses, "StatusId", "StatusName");
             return View(session);

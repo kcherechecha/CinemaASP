@@ -19,9 +19,11 @@ namespace LabProject.Controllers
         }
 
         // GET: MovieCasts
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int movieId, string movieName)
         {
-            var cinemaContext = _context.MovieCasts.Include(m => m.CastMember).Include(m => m.Movie).Include(m => m.Position);
+            var cinemaContext = _context.MovieCasts.Where(c => c.MovieId == movieId).Include(m => m.CastMember).Include(m => m.Movie).Include(m => m.Position);
+            ViewBag.MovieId = movieId;
+            ViewBag.MovieName = movieName;
             return View(await cinemaContext.ToListAsync());
         }
 
@@ -49,9 +51,9 @@ namespace LabProject.Controllers
         // GET: MovieCasts/Create
         public IActionResult Create(int movieId)
         {
-            ViewData["CastMemberId"] = new SelectList(_context.CastMembers, "CastMemberId", "CastMemberId");
+            ViewData["CastMemberId"] = new SelectList(_context.CastMembers, "CastMemberId", "CastMemberFullName");
             //ViewData["MovieId"] = new SelectList(_context.Movies, "MovieId", "MovieId");
-            ViewData["PositionId"] = new SelectList(_context.Positions, "PositionId", "PositionId");
+            ViewData["PositionId"] = new SelectList(_context.Positions, "PositionId", "PositionName");
             ViewBag.MovieId = movieId;
             return View();
         }
@@ -76,12 +78,32 @@ namespace LabProject.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Create", new { movieId = movieId});
             }
-            ViewData["CastMemberId"] = new SelectList(_context.CastMembers, "CastMemberId", "CastMemberId", movieCast.CastMemberId);
-            ViewData["MovieId"] = new SelectList(_context.Movies, "MovieId", "MovieId", movieCast.MovieId);
-            ViewData["PositionId"] = new SelectList(_context.Positions, "PositionId", "PositionId", movieCast.PositionId);
+            ViewData["CastMemberId"] = new SelectList(_context.CastMembers, "CastMemberId", "CastMemberFullName", movieCast.CastMemberId);
+            //ViewData["MovieId"] = new SelectList(_context.Movies, "MovieId", "MovieId", movieCast.MovieId);
+            ViewData["PositionId"] = new SelectList(_context.Positions, "PositionId", "PositionName", movieCast.PositionId);
             return View(movieCast);
         }
 
+        public async Task<IActionResult> CreateToTable(int movieId, [Bind("MovieCastId,CastMemberId,PositionId,MovieId")] MovieCast movieCast)
+        {
+            var preMovieCast = _context.MovieCasts.Where(m => m.MovieId == movieId).FirstOrDefault();
+            if (preMovieCast != null && preMovieCast.CastMemberId == movieCast.CastMemberId)
+            {
+                // get message error "This actor already exist in this film" try to add again
+                return RedirectToAction("Create", new { movieId = movieId });
+            }
+            movieCast.MovieId = movieId;
+            if (ModelState.IsValid)
+            {
+                _context.Add(movieCast);
+                await _context.SaveChangesAsync();
+                return View(nameof(Index));
+            }
+            ViewData["CastMemberId"] = new SelectList(_context.CastMembers, "CastMemberId", "CastMemberFullName", movieCast.CastMemberId);
+            //ViewData["MovieId"] = new SelectList(_context.Movies, "MovieId", "MovieId", movieCast.MovieId);
+            ViewData["PositionId"] = new SelectList(_context.Positions, "PositionId", "PositionName", movieCast.PositionId);
+            return View(movieCast);
+        }
         // GET: MovieCasts/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -95,9 +117,9 @@ namespace LabProject.Controllers
             {
                 return NotFound();
             }
-            ViewData["CastMemberId"] = new SelectList(_context.CastMembers, "CastMemberId", "CastMemberId", movieCast.CastMemberId);
-            ViewData["MovieId"] = new SelectList(_context.Movies, "MovieId", "MovieId", movieCast.MovieId);
-            ViewData["PositionId"] = new SelectList(_context.Positions, "PositionId", "PositionId", movieCast.PositionId);
+            ViewData["CastMemberId"] = new SelectList(_context.CastMembers, "CastMemberId", "CastMemberFullName", movieCast.CastMemberId);
+            //ViewData["MovieId"] = new SelectList(_context.Movies, "MovieId", "MovieId", movieCast.MovieId);
+            ViewData["PositionId"] = new SelectList(_context.Positions, "PositionId", "PositionName", movieCast.PositionId);
             return View(movieCast);
         }
 

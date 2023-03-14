@@ -54,7 +54,7 @@ namespace LabProject.Controllers
                 return NotFound();
             }
 
-            return RedirectToAction("Index", "MovieCasts", new {id = movie.MovieId, name = movie.MovieName});
+            return RedirectToAction("Index", "MovieCasts", new {movieId = movie.MovieId, movieName = movie.MovieName});
         }
 
         // GET: Movies/Create
@@ -175,10 +175,14 @@ namespace LabProject.Controllers
             var movie = await _context.Movies
                 .Include(m => m.MovieGenres)
                 .Include(m => m.MovieCasts)
+                .Include(m => m.Sessions)
                 .FirstOrDefaultAsync(m => m.MovieId == id);
 
             if (movie != null)
             {
+                foreach (var m in movie.Sessions)
+                    _context.Remove(m);
+
                 foreach (var m in movie.MovieGenres)
                     _context.Remove(m);
 

@@ -4,11 +4,8 @@
     ViewData["Title"] = "ShowMovie";
 }
 
-<h1>View</h1>
+<h1>Фільм на сеансі</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
 <table class="table">
     <thead>
         <tr>
@@ -43,9 +40,9 @@
                 @Html.DisplayFor(modelItem => item.MovieReleaseDate)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.MovieId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.MovieId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.MovieId">Delete</a>
+                <a asp-action="Details" asp-route-id="@item.MovieId">Актори</a> |
+                <a asp-action="Edit" asp-route-id="@item.MovieId">Редагувати</a> |
+                <a asp-action="Delete" asp-route-id="@item.MovieId">Видалити</a>
             </td>
         </tr>
 }

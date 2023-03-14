@@ -45,6 +45,7 @@
             </td>
             <td>
                 <a asp-action="Details" asp-route-id="@item.MovieId">Актори</a> |
+                @Html.ActionLink("Жанри", "MovieGenreList", "Genres" , new {movieId = item.MovieId}) |
                 <a asp-action="Edit" asp-route-id="@item.MovieId">Редагувати</a> |
                 <a asp-action="Delete" asp-route-id="@item.MovieId">Видалити</a>
             </td>

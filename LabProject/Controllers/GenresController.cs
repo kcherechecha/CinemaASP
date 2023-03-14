@@ -26,6 +26,17 @@ namespace LabProject.Controllers
             return View(await _context.Genres.ToListAsync());
         }
 
+        public async Task<IActionResult> MovieGenreList(int? movieId)
+        {
+            // get only first genre, not all
+            var movieGenre = await _context.MovieGenres.FirstOrDefaultAsync(m => m.MovieId == movieId);
+
+            var genres = _context.Genres.Where(g => g.GenreId == movieGenre.GenreId);
+
+            ViewBag.MovieId = movieId;
+            return View(await genres.ToListAsync());
+        }
+
         // GET: Genres/Details/5
         public async Task<IActionResult> Details(int? id)
         {

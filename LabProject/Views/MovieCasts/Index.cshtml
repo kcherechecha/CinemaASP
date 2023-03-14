@@ -4,20 +4,20 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Команда фільму</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+@*<p>
+    @Html.ActionLink("Додати нового актора", "CreateToTable", new {movieId = ViewBag.CinemaId})
+</p>*@
 <table class="table">
     <thead>
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.CastMember)
             </th>
-            <th>
+            @*<th>
                 @Html.DisplayNameFor(model => model.Movie)
-            </th>
+            </th>*@
             <th>
                 @Html.DisplayNameFor(model => model.Position)
             </th>
@@ -28,18 +28,18 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.CastMember.CastMemberId)
+                @Html.DisplayFor(modelItem => item.CastMember.CastMemberFullName)
+            </td>
+            @*<td>
+                @Html.DisplayFor(modelItem => item.Movie.MovieName)
+            </td>*@
+            <td>
+                @Html.DisplayFor(modelItem => item.Position.PositionName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Movie.MovieId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Position.PositionId)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.MovieCastId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.MovieCastId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.MovieCastId">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.MovieCastId">Редагувати</a> |
+                @*<a asp-action="Details" asp-route-id="@item.MovieCastId">Details</a> |*@
+                <a asp-action="Delete" asp-route-id="@item.MovieCastId">Видалити</a>
             </td>
         </tr>
 }

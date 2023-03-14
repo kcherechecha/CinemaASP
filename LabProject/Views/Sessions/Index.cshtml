@@ -4,7 +4,7 @@
     ViewData["Title"] = "Сеанси в залі";
 }
 
-<h1>Сеанси в @ViewBag.HallName</h1>
+<h1>Сеанси в залі @ViewBag.HallName</h1>
 
 <p>
     @Html.ActionLink("Додати новий сеанс", "Create", new {HallId = ViewBag.HallId})
@@ -49,9 +49,9 @@
                 @Html.DisplayFor(modelItem => item.Movie.MovieName)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.SessionId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.SessionId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.SessionId">Delete</a>
+                <a asp-action="Details" asp-route-id="@item.SessionId">Про фільм</a> |
+                <a asp-action="Edit" asp-route-id="@item.SessionId">Редагувати</a> |
+                <a asp-action="Delete" asp-route-id="@item.SessionId">Видалити</a>
             </td>
         </tr>
 }
