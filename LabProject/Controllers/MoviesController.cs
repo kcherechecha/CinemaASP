@@ -78,6 +78,18 @@ namespace LabProject.Controllers
                     ModelState.AddModelError("MovieName", "Вже існує фільм з такою назвою");
                     return View(existMovieName);
                 }
+
+                DateTime enteredDate = movie.MovieReleaseDate;
+
+                DateTime startDate = new DateTime(1985, 1, 1);
+                DateTime endDate = new DateTime(2027, 12, 31);
+
+                if (enteredDate <= startDate || enteredDate >= endDate)
+                {
+                    ModelState.AddModelError("MovieReleaseDate", "Неможливо призначити таку дату");
+                    return View(movie);
+                }
+
                 _context.Add(movie);
                 await _context.SaveChangesAsync();
                 //return RedirectToAction(nameof(Index));

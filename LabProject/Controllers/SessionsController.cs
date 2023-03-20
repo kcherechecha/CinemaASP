@@ -77,7 +77,44 @@ namespace LabProject.Controllers
 
             if (ModelState.IsValid)
             {
-                var existSessionName = await _context.Sessions.FirstOrDefaultAsync(c => c.SessionNumber == session.SessionNumber && c.HallId == hallId);
+
+                DateTime enteredDate = session.SessionDateTime;
+                DateTime curDate = DateTime.UtcNow;
+
+                var movie = await _context.Movies.FirstOrDefaultAsync(m => m.MovieId == session.MovieId);
+                DateTime movieDate = movie.MovieReleaseDate;
+
+                DateTime startDate = new DateTime(2022, 1, 1);
+                DateTime endDate = new DateTime(2024, 12, 31);
+
+                if (enteredDate <= startDate || enteredDate >= endDate)
+                {
+                    ViewBag.HallId = hallId;
+                    ModelState.AddModelError("SessionDateTime", "Неможливо призначити таку дату");
+                    ViewData["MovieId"] = new SelectList(_context.Movies, "MovieId", "MovieName", session.MovieId);
+                    ViewData["StatusId"] = new SelectList(_context.Statuses, "StatusId", "StatusName");
+                    return View(session);
+                }
+
+                if(enteredDate > curDate && session.StatusId == 3 || enteredDate < curDate && session.StatusId == 1)
+                {
+                    ViewBag.HallId = hallId;
+                    ModelState.AddModelError("SessionDateTime", "Оберіть відповідний статус");
+                    ViewData["MovieId"] = new SelectList(_context.Movies, "MovieId", "MovieName", session.MovieId);
+                    ViewData["StatusId"] = new SelectList(_context.Statuses, "StatusId", "StatusName");
+                    return View(session);
+                }
+
+                if(enteredDate < movieDate)
+                {
+                    ViewBag.HallId = hallId;
+                    ModelState.AddModelError("SessionDateTime", "Неможливо призначити сеанс, фільм ще не вийшов");
+                    ViewData["MovieId"] = new SelectList(_context.Movies, "MovieId", "MovieName", session.MovieId);
+                    ViewData["StatusId"] = new SelectList(_context.Statuses, "StatusId", "StatusName");
+                    return View(session);
+                }
+
+                    var existSessionName = await _context.Sessions.FirstOrDefaultAsync(c => c.SessionNumber == session.SessionNumber && c.HallId == hallId);
 
                 if (existSessionName != null)
                 {
@@ -180,18 +217,23 @@ namespace LabProject.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            
             if (_context.Sessions == null)
             {
                 return Problem("Entity set 'CinemaContext.Sessions'  is null.");
             }
             var session = await _context.Sessions.FindAsync(id);
+
+            int hallId = session.HallId;
+            var hall = await _context.Halls.FindAsync(hallId);
+            string hallName = hall.HallName;
             if (session != null)
             {
                 _context.Sessions.Remove(session);
             }
             
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Index), new {id = hallId, name = hallName});
         }
 
         private bool SessionExists(int id)
