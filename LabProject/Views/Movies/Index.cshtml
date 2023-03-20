@@ -49,7 +49,7 @@
                 @Html.ActionLink("Жанри", "MovieGenreList", "Genres" , new {movieId = item.MovieId}) |
                 <a asp-action="Edit" asp-route-id="@item.MovieId">Редагувати</a> |
                 <a asp-action="Delete" asp-route-id="@item.MovieId">Видалити</a>*@
-                    <a href="@Url.Action("Details", new { id = item.MovieId })"><input type="button" value="Актори" class="btn btn-info" /></a>
+                    <a href="@Url.Action("Details", new { id = item.MovieId })"><input type="button" value="Команда" class="btn btn-info" /></a>
                     <a href="@Url.Action("MovieGenreList", "Genres", new { movieId = item.MovieId })"><input type="button" value="Жанри" class="btn btn-info" /></a>
                     <a href="@Url.Action("Edit", new { id = item.MovieId })"><input type="button" value="Редагувати" class="btn btn-outline-info" /></a>
                     <a href="@Url.Action("Delete", new { id = item.MovieId })"><input type="button" value="Видалити" class="btn btn-outline-info" /></a>
@@ -58,3 +58,26 @@
 }
     </tbody>
 </table>
+<div class="container">
+    <div id="chart2"></div>
+</div>
+@section scripts{
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script>
+        google.charts.load('current', { 'packages': ['corechart'] });
+        google.charts.setOnLoadCallback(drawChart);
+        function drawChart() {
+            $.get('/api/Chart/JsonDataTeam', function (JsonDataTeam) {
+                data = google.visualization.arrayToDataTable(JsonDataTeam, false);
+                var option = {
+                    title: "Відношення кількостей акторів у фільмах",
+                    width: 500,
+                    height: 400,
+                    pieHole: 0.4
+                };
+                chart = new google.visualization.PieChart(document.getElementById('chart2'));
+                chart.draw(data, option);
+            })
+        }
+    </script>
+}

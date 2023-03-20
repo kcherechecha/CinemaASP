@@ -48,7 +48,7 @@
                 @*<a asp-action="Details" asp-route-id="@item.MovieId">Актори</a> |
                 <a asp-action="Edit" asp-route-id="@item.MovieId">Редагувати</a> |
                 <a asp-action="Delete" asp-route-id="@item.MovieId">Видалити</a>*@
-                    <a href="@Url.Action("Details", new { id = item.MovieId })"><input type="button" value="Актори" class="btn btn-info" /></a>
+                    <a href="@Url.Action("Details", new { id = item.MovieId })"><input type="button" value="Команда" class="btn btn-info" /></a>
                     <a href="@Url.Action("MovieGenreList", "Genres", new { movieId = item.MovieId })"><input type="button" value="Жанри" class="btn btn-info" /></a>
             </td>
         </tr>
