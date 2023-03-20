@@ -4,12 +4,13 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Фільми</h1>
+<h1 class="mt-5">Фільми</h1>
+<a asp-action="Create"> <input type="button" value="Додати фільм" class="btn btn-info disabled mt-2 mb-3" /></a>
 
-<p>
-    @*@Html.ActionLink("Додати новий фільм", "Create")*@
+@*<p>
+    @Html.ActionLink("Додати новий фільм", "Create")
     <a asp-action="Create">Додати новий фільм</a>
-</p>
+</p>*@
 <table class="table">
     <thead>
         <tr>
@@ -35,7 +36,7 @@
                 @Html.DisplayFor(modelItem => item.MovieName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.MovieDuration)
+                @Html.DisplayFor(modelItem => item.MovieDuration)хв
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.MovieRating)
@@ -44,10 +45,14 @@
                 @Html.DisplayFor(modelItem => item.MovieReleaseDate)
             </td>
             <td>
-                <a asp-action="Details" asp-route-id="@item.MovieId">Актори</a> |
+                @*<a asp-action="Details" asp-route-id="@item.MovieId">Актори</a> |
                 @Html.ActionLink("Жанри", "MovieGenreList", "Genres" , new {movieId = item.MovieId}) |
                 <a asp-action="Edit" asp-route-id="@item.MovieId">Редагувати</a> |
-                <a asp-action="Delete" asp-route-id="@item.MovieId">Видалити</a>
+                <a asp-action="Delete" asp-route-id="@item.MovieId">Видалити</a>*@
+                    <a href="@Url.Action("Details", new { id = item.MovieId })"><input type="button" value="Актори" class="btn btn-info" /></a>
+                    <a href="@Url.Action("MovieGenreList", "Genres", new { movieId = item.MovieId })"><input type="button" value="Жанри" class="btn btn-info" /></a>
+                    <a href="@Url.Action("Edit", new { id = item.MovieId })"><input type="button" value="Редагувати" class="btn btn-outline-info" /></a>
+                    <a href="@Url.Action("Delete", new { id = item.MovieId })"><input type="button" value="Видалити" class="btn btn-outline-info" /></a>
             </td>
         </tr>
 }

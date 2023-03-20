@@ -21,20 +21,34 @@ namespace LabProject.Controllers
         // GET: Genres
         public async Task<IActionResult> Index(int? movieId)
         {
-            //var dbGenreContext = _context.Genres.Include(g => g.GenreName);
             ViewBag.MovieId = movieId;
             return View(await _context.Genres.ToListAsync());
         }
 
+        public async Task<IActionResult> AddedGenreList(int? movieId)
+        {
+            bool buttonCheck = true;
+            
+            var movieGenre = await _context.MovieGenres.Where(m => m.MovieId == movieId).Select(m => m.GenreId).ToListAsync();
+
+            var genres = await _context.Genres.Where(g => movieGenre.Contains(g.GenreId)).ToListAsync();
+
+            if(genres.Count == 0)
+                buttonCheck = false;
+
+            ViewBag.buttonCheck = buttonCheck;
+            ViewBag.MovieId = movieId;
+            return View(genres);
+        }
+
         public async Task<IActionResult> MovieGenreList(int? movieId)
         {
-            // get only first genre, not all
-            var movieGenre = await _context.MovieGenres.FirstOrDefaultAsync(m => m.MovieId == movieId);
+            var movieGenre = await _context.MovieGenres.Where(m => m.MovieId == movieId).Select(m => m.GenreId).ToListAsync();
 
-            var genres = _context.Genres.Where(g => g.GenreId == movieGenre.GenreId);
+            var genres = await _context.Genres.Where(g => movieGenre.Contains(g.GenreId)).ToListAsync();
 
             ViewBag.MovieId = movieId;
-            return View(await genres.ToListAsync());
+            return View(genres);
         }
 
         // GET: Genres/Details/5
@@ -146,7 +160,7 @@ namespace LabProject.Controllers
         }
 
         // GET: Genres/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(int movieId,int? id)
         {
             if (id == null || _context.Genres == null)
             {
@@ -159,27 +173,29 @@ namespace LabProject.Controllers
             {
                 return NotFound();
             }
-
+            ViewBag.MovieId = movieId;
             return View(genre);
         }
 
         // POST: Genres/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int movieId,int id)
         {
             if (_context.Genres == null)
             {
                 return Problem("Entity set 'CinemaContext.Genres'  is null.");
             }
-            var genre = await _context.Genres.FindAsync(id);
-            if (genre != null)
+
+            var movieGerne = await _context.MovieGenres.FirstOrDefaultAsync(m => m.GenreId == id && m.MovieId == movieId);
+
+            if (movieGerne != null)
             {
-                _context.Genres.Remove(genre);
+                _context.MovieGenres.Remove(movieGerne);
             }
 
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(AddedGenreList), new {movieId = movieId});
         }
 
         private bool GenreExists(int id)
@@ -188,14 +204,14 @@ namespace LabProject.Controllers
         }
 
 
+
         // Genre/Confrim
         public async Task<IActionResult> ConfirmGenre(int genreId, int movieId)
         {
             var MovieGenre = _context.MovieGenres.Where(b => b.MovieId == movieId).Where(b => b.GenreId == genreId).FirstOrDefault();
             if (MovieGenre != null)
             {
-                // You already add this genre
-                return RedirectToAction("Index", "Genres", new { movieId });
+                return RedirectToAction("AddedGenreList", "Genres", new { movieId });
             }
             var movieGenre = new MovieGenre
             {
@@ -206,7 +222,7 @@ namespace LabProject.Controllers
             _context.MovieGenres.Add(movieGenre);
             await _context.SaveChangesAsync();
 
-            return RedirectToAction("Index", "Genres", new { movieId });
+            return RedirectToAction("AddedGenreList", "Genres", new { movieId });
         }
         // redirect to MovieCast
         public async Task<IActionResult> ProceedToMovieCast(int movieId)
@@ -216,7 +232,8 @@ namespace LabProject.Controllers
             {
                 return RedirectToAction("Index", new { movieId = movieId });
             }
-            return RedirectToAction("Create", "MovieCasts", new { movieId = movieId });
+            //return RedirectToAction("AddCastPosition", "MovieCasts", new { movieId = movie.MovieId, movieName = movie.MovieName });
+            return RedirectToAction("Create", "MovieCasts", new {movieId });
         }
 
     }

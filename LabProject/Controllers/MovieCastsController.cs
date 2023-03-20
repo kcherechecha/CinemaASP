@@ -27,6 +27,20 @@ namespace LabProject.Controllers
             return View(await cinemaContext.ToListAsync());
         }
 
+        public async Task<IActionResult> AddedMovieCastList(int movieId)
+        {
+            bool buttonCheck = true;
+
+            var cinemaContext = await _context.MovieCasts.Where(c => c.MovieId == movieId).Include(m => m.CastMember).Include(m => m.Movie).Include(m => m.Position).ToListAsync();
+
+            if (cinemaContext.Count == 0)
+                buttonCheck = false;
+
+            ViewBag.buttonCheck = buttonCheck;
+            ViewBag.MovieId = movieId;
+            return View(cinemaContext);
+        }
+
         // GET: MovieCasts/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -76,7 +90,7 @@ namespace LabProject.Controllers
             {
                 _context.Add(movieCast);
                 await _context.SaveChangesAsync();
-                return RedirectToAction("Create", new { movieId = movieId});
+                return RedirectToAction("AddedMovieCastList", new {movieId});
             }
             ViewData["CastMemberId"] = new SelectList(_context.CastMembers, "CastMemberId", "CastMemberFullName", movieCast.CastMemberId);
             //ViewData["MovieId"] = new SelectList(_context.Movies, "MovieId", "MovieId", movieCast.MovieId);
@@ -192,13 +206,14 @@ namespace LabProject.Controllers
                 return Problem("Entity set 'CinemaContext.MovieCasts'  is null.");
             }
             var movieCast = await _context.MovieCasts.FindAsync(id);
+            int movieId = movieCast.MovieId;
             if (movieCast != null)
             {
                 _context.MovieCasts.Remove(movieCast);
             }
             
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(AddedMovieCastList), new { movieId });
         }
 
         private bool MovieCastExists(int id)

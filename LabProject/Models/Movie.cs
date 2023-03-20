@@ -13,14 +13,18 @@ public partial class Movie
     public string MovieName { get; set; }
 
     [Required(ErrorMessage = "Тривалість фільму обов'язкова")]
-    [Display(Name = "Тривалість")]
+    [Display(Name = "Тривалість (хв)")]
+    [Range(15, 400, ErrorMessage ="Недопустима тривалість")]
     public int MovieDuration { get; set; }
 
     [Display(Name = "Рейтинг")]
+    [Range(0,5, ErrorMessage ="Недопустима оцінка") ]
     public int? MovieRating { get; set; }
 
     [Required(ErrorMessage = "Дата виходу обов'язкова")]
     [Display(Name = "Дата виходу")]
+    [DataType(DataType.Date)]
+    [DisplayFormat(DataFormatString = "{0:dd.MM.yyyy}", ApplyFormatInEditMode = true)]
     public DateTime MovieReleaseDate { get; set; }
 
     public virtual ICollection<MovieCast> MovieCasts { get; } = new List<MovieCast>();

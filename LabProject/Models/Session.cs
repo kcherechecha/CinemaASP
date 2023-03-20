@@ -10,10 +10,15 @@ public partial class Session
 
     [Required(ErrorMessage = "Номер сеансу обов'язкова")]
     [Display(Name = "Номер сеансу")]
+    [RegularExpression("^#.*", ErrorMessage = "Номер сеансу обов'язково має починатися з #")]
     public string SessionNumber { get; set; }
 
     [Required(ErrorMessage = "Дата та час обов'язкові")]
     [Display(Name = "Дата, час")]
+
+   [DataType(DataType.DateTime)]
+    [DisplayFormat(DataFormatString = "{0:dd.MM.yyyy HH:mm}", ApplyFormatInEditMode = true)]
+    //[Range(typeof(DateTime), "01.01.2022 00:00", "31.12.2024 23:59", ErrorMessage = "Неможливо призначити таку дату")]
     public DateTime SessionDateTime { get; set; }
 
     public int HallId { get; set; }

@@ -4,7 +4,12 @@
     ViewData["Title"] = "ShowMovie";
 }
 
-<h1>Фільм на сеансі</h1>
+<div>
+<h1 class="mt-5">Фільм на сеансі</h1>
+ @*<a href='@Url.Action("Details", "Sessions", new { id = ViewBag.SessionId })'>
+        <input type="button" class="btn btn-info disabled mt-2 mb-3" value="Back" />
+    </a>*@
+</div>
 
 <table class="table">
     <thead>
@@ -40,9 +45,11 @@
                 @Html.DisplayFor(modelItem => item.MovieReleaseDate)
             </td>
             <td>
-                <a asp-action="Details" asp-route-id="@item.MovieId">Актори</a> |
+                @*<a asp-action="Details" asp-route-id="@item.MovieId">Актори</a> |
                 <a asp-action="Edit" asp-route-id="@item.MovieId">Редагувати</a> |
-                <a asp-action="Delete" asp-route-id="@item.MovieId">Видалити</a>
+                <a asp-action="Delete" asp-route-id="@item.MovieId">Видалити</a>*@
+                    <a href="@Url.Action("Details", new { id = item.MovieId })"><input type="button" value="Актори" class="btn btn-info" /></a>
+                    <a href="@Url.Action("MovieGenreList", "Genres", new { movieId = item.MovieId })"><input type="button" value="Жанри" class="btn btn-info" /></a>
             </td>
         </tr>
 }

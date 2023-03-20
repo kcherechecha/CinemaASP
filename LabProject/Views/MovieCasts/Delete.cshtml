@@ -32,7 +32,7 @@
     
     <form asp-action="Delete">
         <input type="hidden" asp-for="MovieCastId" />
-        <input type="submit" value="Видалити" class="btn btn-danger" /> |
-        <a asp-action="Index">До списку команди</a>
+        <input type="submit" value="Видалити" class="btn btn-danger" style="font-size:15px" />
+        <button type="button" onclick="location.href='@Url.Action("AddedMovieCastList", new {movieId = Model.MovieId})'" class="btn btn-outline-info" style="font-size:15px">До списку команди</button>
     </form>
 </div>

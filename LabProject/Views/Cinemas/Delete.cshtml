@@ -26,7 +26,7 @@
     
     <form asp-action="Delete">
         <input type="hidden" asp-for="CinemaId" />
-        <input type="submit" value="Видалити" class="btn btn-danger" /> |
-        <a asp-action="Index">До списку кінотеатрів</a>
+        <input type="submit" value="Видалити" class="btn btn-danger" style="font-size:15px" /> 
+        <button type="button" onclick="location.href='@Url.Action("Index")'" class="btn btn-outline-info" style="font-size:15px">До списку кінотеатрів</button>
     </form>
 </div>

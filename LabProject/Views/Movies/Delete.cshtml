@@ -6,9 +6,8 @@
 
 <h1>Видалити фільм</h1>
 
-<h3>Ви впевнені, що хочете видалити цей фільм?</h3>
 <div>
-    <h4>Зауважте! При видаленні фільму видаляться всі сеанси з ним</h4>
+    <h4 class="mb-2">Зауважте! При видаленні фільму видаляться всі сеанси з ним</h4>
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
@@ -39,7 +38,7 @@
     
     <form asp-action="Delete">
         <input type="hidden" asp-for="MovieId" />
-        <input type="submit" value="Видалити" class="btn btn-danger" /> |
-        <a asp-action="Index">До списку фільмів</a>
+         <input type="submit" value="Видалити" class="btn btn-danger" style="font-size:15px" /> 
+        <button type="button" onclick="location.href='@Url.Action("Index")'" class="btn btn-outline-info" style="font-size:15px">До списку фільмів</button>
     </form>
 </div>

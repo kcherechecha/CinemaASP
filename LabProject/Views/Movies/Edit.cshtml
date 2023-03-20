@@ -4,7 +4,10 @@
     ViewData["Title"] = "Edit";
 }
 
+<div>
 <h1>Редагувати фільм</h1>
+    <a asp-action="Index"> <input type="submit" value="До списку фільмів" class="btn btn-outline-info mt-2" /></a>
+</div>
 
 <hr />
 <div class="row">
@@ -33,15 +36,15 @@
                 <span asp-validation-for="MovieReleaseDate" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Зберегти зміни" class="btn btn-primary" />
+                <input type="submit" value="Зберегти зміни" class="btn btn-info mt-3" style="font-size:18px" />
             </div>
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">До списку фільмів</a>
-</div>
+@*<div>
+    <a href="@Url.Action("ShowMovie", new {id = ViewBag.MovieId})">До фільму</a>
+</div>*@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

@@ -4,11 +4,16 @@
     ViewData["Title"] = "Сеанси в залі";
 }
 
-<h1>Сеанси в залі @ViewBag.HallName</h1>
+<div>
+    <h1 class="mt-5">Сеанси в залі @ViewBag.HallName</h1>
+<a href='@Url.Action("Create", new { HallId = ViewBag.HallId })'>
+        <input type="button" class="btn btn-info disabled mt-2 mb-3" value="Додати новий сеанс" />
+    </a>
+</div>
 
-<p>
+@*<p>
     @Html.ActionLink("Додати новий сеанс", "Create", new {HallId = ViewBag.HallId})
-</p>
+</p>*@
 <table class="table">
     <thead>
         <tr>
@@ -21,9 +26,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.Status)
             </th>
-            <th>
+            @*<th>
                 @Html.DisplayNameFor(model => model.Hall)
-            </th>
+            </th>*@
             <th>
                 @Html.DisplayNameFor(model => model.Movie)
             </th>
@@ -42,18 +47,22 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Status.StatusName)
             </td>
-            <td>
+            @*<td>
                 @Html.DisplayFor(modelItem => item.Hall.HallId)
-            </td>
+            </td>*@
             <td>
                 @Html.DisplayFor(modelItem => item.Movie.MovieName)
             </td>
             <td>
-                <a asp-action="Details" asp-route-id="@item.SessionId">Про фільм</a> |
+                @*<a asp-action="Details" asp-route-id="@item.SessionId">Про фільм</a> |
                 <a asp-action="Edit" asp-route-id="@item.SessionId">Редагувати</a> |
-                <a asp-action="Delete" asp-route-id="@item.SessionId">Видалити</a>
+                <a asp-action="Delete" asp-route-id="@item.SessionId">Видалити</a>*@
+                    <a href="@Url.Action("Details", new { id = item.SessionId })"><input type="button" value="Про фільм" class="btn btn-info" /></a>
+                    <a href="@Url.Action("Edit", new { id = item.SessionId })"><input type="button" value="Редагувати" class="btn btn-outline-info" /></a>
+                    <a href="@Url.Action("Delete", new { id = item.SessionId })"><input type="button" value="Видалити" class="btn btn-outline-info" /></a>
             </td>
         </tr>
 }
     </tbody>
 </table>
+

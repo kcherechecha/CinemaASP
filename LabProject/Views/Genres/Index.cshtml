@@ -4,7 +4,7 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1 class="mt-5 mb-4">Обрати жанр</h1>
 
 @*<p>
     <a asp-action="Create">Create New</a>
@@ -14,10 +14,9 @@
 <table class="table">
     <thead>
         <tr>
-            <th>
+            @*<th>
                 @Html.DisplayNameFor(model => model.GenreName)
-            </th>
-            <th></th>
+            </th>*@
         </tr>
     </thead>
     <tbody>
@@ -49,14 +48,11 @@
                <form asp-action="ConfirmGenre" method="post">
                    <input type="hidden" name="genreId" value="@item.GenreId" />
                    <input type="hidden"name="movieId" value="@ViewBag.MovieId" />
-                   <button type="submit">Confirm</button>
+                   <button type="submit" class="btn btn-info">Confirm</button>
                </form>
             </td>
         </tr>
 }
-        <form asp-action="ProceedToMovieCast" method="post">
-            <input type="hidden" name="movieId" value="@ViewBag.MovieId" />
-            <button type="submit">Add cast</button>
-        </form>
+
     </tbody>
 </table>

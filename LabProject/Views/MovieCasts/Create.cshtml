@@ -5,6 +5,7 @@
 }
 
 <h1>Додати в команду</h1>
+<a href="@Url.Action("AddedMovieCastList", new { movieId = ViewBag.MovieId})"><input value="До списку команди" type="button" class="btn btn-outline-info" /></a>
 
 <hr />
 <div class="row">
@@ -27,18 +28,12 @@
             <input type="hidden" value="@ViewBag.MovieId" name="MovieId" />
 
             <div class="form-group">
-                <input type="submit" value="Додати" class="btn btn-primary" />
-            </div>
-            <div>
-                @Html.ActionLink("Finish", "Index", "Movies")        
+                <input type="submit" value="Додати" class="btn btn-info mt-3" style="font-size:18px" />
             </div>
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">До списку фільмів</a>
-</div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

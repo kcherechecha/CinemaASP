@@ -5,6 +5,7 @@
 }
 
 <h1>Додати фільм</h1>
+<a asp-action="Index"> <input type="submit" value="До списку фільмів" class="btn btn-outline-info mt-2" /></a>
 
 <hr />
 <div class="row">
@@ -32,15 +33,15 @@
                 <span asp-validation-for="MovieReleaseDate" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Додати" class="btn btn-primary" />
+                <input type="submit" value="Додати" class="btn btn-info mt-3" style="font-size:18px" />
             </div>
         </form>
     </div>
 </div>
 
-<div>
+@*<div>
     <a asp-action="Index">До списку фільмів</a>
-</div>
+</div>*@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

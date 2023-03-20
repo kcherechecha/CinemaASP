@@ -154,13 +154,49 @@ namespace LabProject.Controllers
             {
                 return Problem("Entity set 'CinemaContext.CastMembers'  is null.");
             }
-            var castMember = await _context.CastMembers.FindAsync(id);
+            var castMember = await _context.CastMembers
+                .Include(m => m.MovieCasts)
+                .FirstOrDefaultAsync(m => m.CastMemberId == id);
+
+            var movieCast = await _context.MovieCasts.FirstOrDefaultAsync(m => m.CastMemberId == id);
+            int movieId = movieCast.MovieId;
+
             if (castMember != null)
             {
+                foreach (var c in castMember.MovieCasts)
+                    _context.Remove(c);
                 _context.CastMembers.Remove(castMember);
             }
             
             await _context.SaveChangesAsync();
+
+            var movieCastExist = await _context.MovieCasts
+                .FirstOrDefaultAsync(m => m.MovieId == movieId);
+            if (movieCastExist == null)
+            {
+                var movie = await _context.Movies
+                .Include(m => m.MovieGenres)
+                .Include(m => m.MovieCasts)
+                .Include(m => m.Sessions)
+                .FirstOrDefaultAsync(m => m.MovieId == movieId);
+
+                if (movie != null)
+                {
+                    foreach (var m in movie.Sessions)
+                        _context.Remove(m);
+
+                    foreach (var m in movie.MovieGenres)
+                        _context.Remove(m);
+
+                    foreach (var m in movie.MovieCasts)
+                        _context.Remove(m);
+
+                    _context.Movies.Remove(movie);
+                }
+
+                await _context.SaveChangesAsync();
+            }
+
             return RedirectToAction(nameof(Index));
         }
 

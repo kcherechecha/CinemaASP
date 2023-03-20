@@ -1,24 +1,23 @@
 ﻿@model IEnumerable<LabProject.Models.MovieCast>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "AddCastPosition";
 }
 
-<h1 class="mt-5">Команда фільму @ViewBag.MovieName</h1>
-@*<a>to movie</a>*@
+<h1 class="mt-5">Додати в команду</h1>
 
-@*<p>
-    @Html.ActionLink("Додати нового актора", "CreateToTable", new {movieId = ViewBag.CinemaId})
-</p>*@
+<p>
+    <a asp-action="Create"><input type="button" value="Додати члена команди" class="btn btn-info disabled mt-2 mb-3" /></a>
+</p>
 <table class="table">
     <thead>
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.CastMember)
             </th>
-            @*<th>
+            <th>
                 @Html.DisplayNameFor(model => model.Movie)
-            </th>*@
+            </th>
             <th>
                 @Html.DisplayNameFor(model => model.Position)
             </th>
@@ -31,17 +30,17 @@
             <td>
                 @Html.DisplayFor(modelItem => item.CastMember.CastMemberFullName)
             </td>
-            @*<td>
+            <td>
                 @Html.DisplayFor(modelItem => item.Movie.MovieName)
-            </td>*@
+            </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Position.PositionName)
             </td>
-            @*<td>
-                <a asp-action="Edit" asp-route-id="@item.MovieCastId">Редагувати</a> |
+            <td>
+                @*<a asp-action="Edit" asp-route-id="@item.MovieCastId">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.MovieCastId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.MovieCastId">Видалити</a>
-            </td>*@
+                <a asp-action="Delete" asp-route-id="@item.MovieCastId">Delete</a>*@
+            </td>
         </tr>
 }
     </tbody>

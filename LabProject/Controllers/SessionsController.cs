@@ -77,6 +77,14 @@ namespace LabProject.Controllers
 
             if (ModelState.IsValid)
             {
+                var existSessionName = await _context.Sessions.FirstOrDefaultAsync(c => c.SessionNumber == session.SessionNumber && c.HallId == hallId);
+
+                if (existSessionName != null)
+                {
+                    ViewBag.HallId = hallId;
+                    ModelState.AddModelError("SessionNumber", "Такий номер сеансу вже існує");
+                    return View(existSessionName);
+                }
                 _context.Add(session);
                 await _context.SaveChangesAsync();
                 //return RedirectToAction(nameof(Index));
@@ -103,7 +111,7 @@ namespace LabProject.Controllers
                 return NotFound();
             }
             ViewData["HallId"] = new SelectList(_context.Halls, "HallId", "HallId", session.HallId);
-            ViewData["MovieId"] = new SelectList(_context.Movies, "MovieId", "MovieId", session.MovieId);
+            ViewData["MovieId"] = new SelectList(_context.Movies, "MovieId", "MovieName", session.MovieId);
             ViewData["StatusId"] = new SelectList(_context.Statuses, "StatusId", "StatusName");
             return View(session);
         }
@@ -157,6 +165,7 @@ namespace LabProject.Controllers
             var session = await _context.Sessions
                 .Include(s => s.Hall)
                 .Include(s => s.Movie)
+                .Include(s => s.Status)
                 .FirstOrDefaultAsync(m => m.SessionId == id);
             if (session == null)
             {

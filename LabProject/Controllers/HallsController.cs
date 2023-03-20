@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using LabProject.Models;
+using System.Security.Cryptography;
 
 namespace LabProject.Controllers
 {
@@ -77,6 +78,7 @@ namespace LabProject.Controllers
                     ModelState.AddModelError("HallName", "Зала з такою назвою вже існує в цьому кінотеатрі");
                     return View(existHallName);
                 }
+
                 _context.Add(hall);
                 await _context.SaveChangesAsync();
                 //return RedirectToAction(nameof(Index));
@@ -179,8 +181,11 @@ namespace LabProject.Controllers
             }
             var hall = await _context.Halls
                 .Include(h => h.Sessions)
+                .Include(h => h.Cinema)
                 .FirstOrDefaultAsync(h => h.HallId == id);
 
+            int cinemaId = hall.CinemaId;
+            string cinemaName = hall.Cinema.CinemaName;
             if (hall != null)
             {
                 foreach (var h in hall.Sessions)
@@ -190,7 +195,8 @@ namespace LabProject.Controllers
             }
             
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            //return RedirectToAction(nameof(Index));
+            return RedirectToAction("Index", new {id = cinemaId, name = cinemaName});
         }
 
         private bool HallExists(int id)
