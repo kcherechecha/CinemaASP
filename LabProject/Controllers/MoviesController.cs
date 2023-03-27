@@ -246,7 +246,7 @@ namespace LabProject.Controllers
                         var movies = new List<Movie>();
                         while (true)
                         {
-                            if (worksheet.Cell(row, 1).IsEmpty() || worksheet.Cell(row, 2).IsEmpty() || worksheet.Cell(row, 3).IsEmpty())
+                            if (worksheet.Cell(row, 1).IsEmpty())
                             {
                                 row = 2;
                                 worksheetPos++;
@@ -258,13 +258,9 @@ namespace LabProject.Controllers
                                 {
                                     break;
                                 }
-                                failedAdd.Add(worksheetPos - 1);
-                                continue;
                             }
 
                             var movie = new Movie();
-
-                            // Отримати дані з рядка
 
                             movie.MovieName = worksheet.Cell(row, 1).GetValue<string>();
                             movie.MovieDuration = worksheet.Cell(row, 2).GetValue<int>();
@@ -307,7 +303,6 @@ namespace LabProject.Controllers
                         }
 
                         if(movies.Count == 0) return RedirectToAction("Index", new { importSuccess = "Жоден фільм не було додано. " });
-                        // Зберегти дані в базі даних
                         await _context.Movies.AddRangeAsync(movies);
                         await _context.SaveChangesAsync();
                         row = 2;
@@ -457,7 +452,7 @@ namespace LabProject.Controllers
             }
 
             if (fileExcel == null) return RedirectToAction("Index", new { importSuccess = "Ви не вибрали файл для завантаження" });
-            if (fileExcel.Length < 0) return RedirectToAction("Index", new { importSuccess = "Вибраний файл пустий, або містить хибну інформацію" });
+            if (fileExcel.Length < 0) return RedirectToAction("Index", new { importSuccess = "Вибраний файл пустий" });
             return RedirectToAction("Index", new { importSuccess = importSuccess });
         }
 
