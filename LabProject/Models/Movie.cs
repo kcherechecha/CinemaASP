@@ -14,11 +14,11 @@ public partial class Movie
 
     [Required(ErrorMessage = "Тривалість фільму обов'язкова")]
     [Display(Name = "Тривалість (хв)")]
-    [Range(15, 400, ErrorMessage ="Недопустима тривалість")]
+    [Range(15, 400, ErrorMessage ="Недопустима тривалість (15-400хв)")]
     public int MovieDuration { get; set; }
 
     [Display(Name = "Рейтинг")]
-    [Range(0,5, ErrorMessage ="Недопустима оцінка") ]
+    [Range(1,5, ErrorMessage ="Недопустима оцінка (1-5)") ]
     public int? MovieRating { get; set; }
 
     [Required(ErrorMessage = "Дата виходу обов'язкова")]

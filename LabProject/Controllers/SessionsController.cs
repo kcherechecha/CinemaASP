@@ -90,7 +90,7 @@ namespace LabProject.Controllers
                 if (enteredDate <= startDate || enteredDate >= endDate)
                 {
                     ViewBag.HallId = hallId;
-                    ModelState.AddModelError("SessionDateTime", "Неможливо призначити таку дату");
+                    ModelState.AddModelError("SessionDateTime", "Неможливо призначити таку дату (01.01.2022-21.12.2024)");
                     ViewData["MovieId"] = new SelectList(_context.Movies, "MovieId", "MovieName", session.MovieId);
                     ViewData["StatusId"] = new SelectList(_context.Statuses, "StatusId", "StatusName");
                     return View(session);

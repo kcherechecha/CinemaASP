@@ -18,7 +18,6 @@ public partial class Session
 
    [DataType(DataType.DateTime)]
     [DisplayFormat(DataFormatString = "{0:dd.MM.yyyy HH:mm}", ApplyFormatInEditMode = true)]
-    //[Range(typeof(DateTime), "01.01.2022 00:00", "31.12.2024 23:59", ErrorMessage = "Неможливо призначити таку дату")]
     public DateTime SessionDateTime { get; set; }
 
     public int HallId { get; set; }
@@ -37,7 +36,6 @@ public partial class Session
     [Display(Name = "Фільм")]
     public virtual Movie Movie { get; set; }
 
-    //[Required(ErrorMessage = "Обов'язково оберіть статус")]
     [Display(Name = "Статус")]
     public virtual Status Status { get; set; }
 }

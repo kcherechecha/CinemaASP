@@ -7,6 +7,37 @@
 <h1 class="mt-5">Фільми</h1>
 <a asp-action="Create"> <input type="button" value="Додати фільм" class="btn btn-info disabled mt-2 mb-3" /></a>
 
+<div class="row mt-3 mb-4">
+<div class="col-6">
+    <p style="font-size:20px" class="mb-2">Оберіть excel-файл для заватаження</p>
+    @using (Html.BeginForm("ImportFromExcel", "Movies", FormMethod.Post, new { enctype = "multipart/form-data", id = "frm-excel" }))
+    {
+        <div class="d-inline-block">
+            <input type = "file" name="fileExcel" id="fileExcel" />
+                @*<label for="fileExcel" class="btn btn-outline-primary">
+                    Вибрати файл
+                <input type="file" id="fileExcel" class="d-none"/>
+            </label>*@
+            <br />
+                @if(@ViewBag.importSucces != 0)
+                {
+                    <p>@ViewBag.importSuccess</p>            
+                }
+            <div>
+            <input type = "submit" value="Завантажити" class="btn btn-primary" />
+            </div>
+        </div>
+    }
+</div>
+
+<div class="col-6">
+        <p style="font-size:20px">Завантаження інформації в файл</p>
+    <a asp-action="Export"><input type="button" value="Завантажити" class="btn btn-primary"/></a>
+</div>
+</div>
+
+
+
 @*<p>
     @Html.ActionLink("Додати новий фільм", "Create")
     <a asp-action="Create">Додати новий фільм</a>

@@ -13,7 +13,7 @@ public partial class Hall
     //[Remote("HallNameExists", "Halls", HttpMethod = "POST", ErrorMessage = "Зала з цією назвою вже існує в цьому кінотеатрі")]
     public string HallName { get; set; }
     [Required(ErrorMessage = "Міскість зали обов'язкова")]
-    [Range(1, int.MaxValue, ErrorMessage = "Така кількість місць неможлива")]
+    [Range(1, 900, ErrorMessage = "Така кількість місць неможлива (1-900)")]
     [Display(Name = "Кількість місць")]
     public int HallCapacity { get; set; }
 
