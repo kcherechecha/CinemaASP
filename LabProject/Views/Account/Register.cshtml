@@ -1,40 +1,40 @@
 ﻿@model LabProject.ViewModels.RegisterViewModel
 
-<h2>Реєстрація нового користувача</h2>
+<h2 class="mb-3 mt-3">Реєстрація нового користувача</h2>
 <form method="post" asp-controller="Account" asp-action="Register">
     <div asp-validation-summary="ModelOnly"></div>
-    <div>
+    <div class="mb-2">
         <label asp-for="Email"></label>
         <br />
         <input asp-for="Email" />
         <span asp-validation-for="Email"></span>
     </div>
-    <div>
+    <div class="mb-2">
         <label asp-for="Username"></label>
         <br />
         <input asp-for="Username" />
         <span asp-validation-for="Username"></span>
     </div>
-    <div>
+    <div class="mb-2">
         <label asp-for="Name"></label>
         <br />
         <input asp-for="Name" />
         <span asp-validation-for="Name"></span>
     </div>
-    <div>
+    <div class="mb-2">
         <label asp-for="Password"></label>
         <br />
         <input asp-for="Password" />
         <span asp-validation-for="Password"></span>
     </div>
-    <div>
+    <div class="mb-3">
         <label asp-for="PasswordConfirm"></label>
         <br />
         <input asp-for="PasswordConfirm" />
         <span asp-validation-for="PasswordConfirm"></span>
     </div>
      <div>
-         <input type="submit" value="Реєстрація" />
+        <input type="submit" value="Реєстрація" class="btn btn-info" style="font-size: 17px" />
      </div>
 </form>
 

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using LabProject.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace LabProject.Controllers
 {
@@ -20,6 +21,7 @@ namespace LabProject.Controllers
 
         // GET: Cinemas
         public async Task<IActionResult> Index()
+
         {
               return _context.Cinemas != null ? 
                           View(await _context.Cinemas.ToListAsync()) :
