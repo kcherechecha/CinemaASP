@@ -60,7 +60,7 @@ namespace LabProject.Controllers
                 {
                     // установка кукі
                     await _signInManager.SignInAsync(user, false);
-                    return RedirectToAction("Index","Home");
+                    return RedirectToAction("Index","Cinemas");
                 }
                 else
                 {
@@ -99,7 +99,7 @@ namespace LabProject.Controllers
                     }
                     else
                     {
-                        return RedirectToAction("Index", "Home");
+                        return RedirectToAction("Index", "Cinemas");
                     }
                 }
                 else

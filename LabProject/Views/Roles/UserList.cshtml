@@ -4,8 +4,8 @@
 <table class="table">
     @foreach (var user in Model)
     {
-        <tr>
-            <td>@user.Email</td>
+            <tr>
+                <td>@user.Email</td>
         <td>
         <a class="btn btn-info" asp-action="Edit" asp-route-userid="@user.Id">Права доступу</a>
         </td>

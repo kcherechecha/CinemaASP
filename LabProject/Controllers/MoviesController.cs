@@ -302,7 +302,7 @@ namespace LabProject.Controllers
                             row++;
                         }
 
-                        if(movies.Count == 0) return RedirectToAction("Index", new { importSuccess = "Жоден фільм не було додано. " });
+                        if(movies.Count == 0) return RedirectToAction("Index", new { importSuccess = importSuccess + " Жоден фільм не було додано. " });
                         await _context.Movies.AddRangeAsync(movies);
                         await _context.SaveChangesAsync();
                         row = 2;

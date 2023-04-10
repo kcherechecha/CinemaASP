@@ -5,30 +5,37 @@
 }
 
 <h1 class="mt-5">Фільми</h1>
-<a asp-action="Create"> <input type="button" value="Додати фільм" class="btn btn-info disabled mt-2 mb-3" /></a>
+
+@if (User.IsInRole("admin"))
+{
+    <a asp-action="Create"> <input type="button" value="Додати фільм" class="btn btn-info disabled mt-2 mb-3" /></a>
+}
 
 <div class="row mt-3 mb-4">
-<div class="col-6">
-    <p style="font-size:20px" class="mb-2">Оберіть excel-файл для заватаження</p>
-    @using (Html.BeginForm("ImportFromExcel", "Movies", FormMethod.Post, new { enctype = "multipart/form-data", id = "frm-excel" }))
+    @if (User.IsInRole("admin"))
     {
-        <div class="d-inline-block">
-            <input type = "file" name="fileExcel" id="fileExcel" />
-                @*<label for="fileExcel" class="btn btn-outline-primary">
+        <div class="col-6">
+            <p style="font-size:20px" class="mb-2">Оберіть excel-файл для заватаження</p>
+            @using (Html.BeginForm("ImportFromExcel", "Movies", FormMethod.Post, new { enctype = "multipart/form-data", id = "frm-excel" }))
+            {
+                <div class="d-inline-block">
+                    <input type = "file" name="fileExcel" id="fileExcel" />
+                    @*<label for="fileExcel" class="btn btn-outline-primary">
                     Вибрати файл
                 <input type="file" id="fileExcel" class="d-none"/>
             </label>*@
-            <br />
-                @if(@ViewBag.importSucces != 0)
-                {
-                    <p>@ViewBag.importSuccess</p>            
-                }
-            <div>
-            <input type = "submit" value="Завантажити" class="btn btn-primary" />
-            </div>
+                    <br />
+                    @if (@ViewBag.importSucces != 0)
+                    {
+                        <p>@ViewBag.importSuccess</p>
+                    }
+                    <div>
+                        <input type = "submit" value="Завантажити" class="btn btn-primary" />
+                    </div>
+                </div>
+            }
         </div>
     }
-</div>
 
 <div class="col-6">
         <p style="font-size:20px">Завантаження інформації в файл</p>
@@ -82,9 +89,12 @@
                 <a asp-action="Delete" asp-route-id="@item.MovieId">Видалити</a>*@
                     <a href="@Url.Action("Details", new { id = item.MovieId })"><input type="button" value="Команда" class="btn btn-info" /></a>
                     <a href="@Url.Action("MovieGenreList", "Genres", new { movieId = item.MovieId })"><input type="button" value="Жанри" class="btn btn-info" /></a>
-                    <a href="@Url.Action("Edit", new { id = item.MovieId })"><input type="button" value="Редагувати" class="btn btn-outline-info" /></a>
-                    <a href="@Url.Action("Delete", new { id = item.MovieId })"><input type="button" value="Видалити" class="btn btn-outline-info" /></a>
-            </td>
+                    @if (User.IsInRole("admin"))
+                    {
+                        <a href="@Url.Action("Edit", new { id = item.MovieId })"><input type="button" value="Редагувати" class="btn btn-outline-info" /></a>
+                        <a href="@Url.Action("Delete", new { id = item.MovieId })"><input type="button" value="Видалити" class="btn btn-outline-info" /></a>
+                    }
+                </td>
         </tr>
 }
     </tbody>
